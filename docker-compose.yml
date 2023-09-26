@@ -1,8 +1,15 @@
 version: '3'
 
 services:
+  web:
+    container_name: php
+    build:
+      context: .
+    ports:
+      - "8080:80"
 ###> doctrine/doctrine-bundle ###
   database:
+    container_name: postgres
     image: postgres:${POSTGRES_VERSION:-15}-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
