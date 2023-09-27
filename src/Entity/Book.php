@@ -17,12 +17,12 @@ class Book
     private string $title;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private \DateTimeInterface $publishedDate;
+    private \DateTimeImmutable $publishedDate;
 
     #[ORM\Column(length: 255)]
     private string $isbn;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "text")]
     private string $description;
 
     #[ORM\ManyToOne(inversedBy: 'books')]
@@ -50,12 +50,12 @@ class Book
         return $this;
     }
 
-    public function getPublishedDate(): \DateTimeInterface
+    public function getPublishedDate(): \DateTimeImmutable
     {
         return $this->publishedDate;
     }
 
-    public function setPublishedDate(\DateTimeInterface $publishedDate): static
+    public function setPublishedDate(\DateTimeImmutable $publishedDate): static
     {
         $this->publishedDate = $publishedDate;
 
