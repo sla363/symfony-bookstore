@@ -17,10 +17,6 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-#RUN composer install --prefer-dist --no-scripts --no-dev --no-interaction
-#RUN composer install --prefer-dist --no-scripts --no-interaction
-RUN composer install --no-interaction
-
-RUN php bin/console doctrine:schema:update --force
+RUN composer install --prefer-dist --no-scripts --no-dev --no-interaction
 
 EXPOSE 80
