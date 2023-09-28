@@ -22,4 +22,12 @@ class MainPageController extends AbstractController
             'books' => $books,
         ]);
     }
+
+    #[Route(path: "/book/{id}", name: "book_resource")]
+    public function book(Book $book): Response
+    {
+        return $this->render("book_resource.html.twig", [
+            'book' => $book
+        ]);
+    }
 }
