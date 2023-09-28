@@ -21,6 +21,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 #RUN composer install --prefer-dist --no-scripts --no-interaction
 RUN composer install --no-interaction
 
-RUN yes | php bin/console doctrine:fixtures:load
+RUN php bin/console doctrine:schema:update --force
 
 EXPOSE 80
