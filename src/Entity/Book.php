@@ -25,6 +25,9 @@ class Book
     #[ORM\Column(type: "text")]
     private string $description;
 
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $price;
+
     #[ORM\ManyToOne(inversedBy: 'books')]
     #[ORM\JoinColumn(nullable: false)]
     private Author $author;
@@ -83,6 +86,17 @@ class Book
     {
         $this->description = $description;
 
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?int $price): static
+    {
+        $this->price = $price;
         return $this;
     }
 
