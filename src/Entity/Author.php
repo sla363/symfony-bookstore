@@ -50,6 +50,11 @@ class Author
         return $this->lastName;
     }
 
+    public function getFullName(): string
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
