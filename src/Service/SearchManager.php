@@ -36,7 +36,8 @@ class SearchManager
                 $queryBuilder->expr()->concat(
                     $queryBuilder->expr()->lower('at.lastName'), $queryBuilder->expr()->concat($queryBuilder->expr()->literal(' '), $queryBuilder->expr()->lower('at.firstName'))
                 ), ':text'
-            ))->setParameter('text', $wrappedLowercaseText);
+            ))
+            ->setParameter('text', $wrappedLowercaseText);
 
         $date = $this->dateManager->createDateFromMultipleFormats($text);
         if ($date) {

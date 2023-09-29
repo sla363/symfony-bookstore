@@ -5,7 +5,11 @@
     <div class="container-fluid">
         {% if no_result is defined and no_result is same as true %}
             <div class="alert bg-warning-subtle text-dark mr-2" role="alert">
-                <p class="mb-0">No result found. Showing all books.</p>
+                <p class="mb-0">No books found matching your criteria. Showing all books.</p>
+            </div>
+        {% elseif no_result is defined and no_result is same as false %}
+            <div class="alert bg-info-subtle text-dark mr-2" role="alert">
+                <p class="mb-0">Found <strong>{{ books|length }}</strong> {{ books|length == 1 ? 'book' : 'books' }} matching your criteria.</p>
             </div>
         {% endif %}
         <div class="row">
