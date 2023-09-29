@@ -3,6 +3,11 @@
 
 {% block body %}
     <div class="container-fluid">
+        {% if no_result is defined and no_result is same as true %}
+            <div class="alert bg-warning-subtle text-dark mr-2" role="alert">
+                <p class="mb-0">No result found. Showing all books.</p>
+            </div>
+        {% endif %}
         <div class="row">
             {% for book in books %}
                 <div class="col-lg-3 col-md-4 col-sm-12 mb-4">
