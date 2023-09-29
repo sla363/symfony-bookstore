@@ -52,6 +52,27 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+<script>
+    function getBootstrapBreakpointValue(breakpoint) {
+        const value = getComputedStyle(document.documentElement).getPropertyValue(`--breakpoint-${breakpoint}`);
+        return parseInt(value, 10);
+    }
+
+    function updateBodyClass() {
+        const smBreakpoint = getBootstrapBreakpointValue('sm');
+        const mdBreakpoint = getBootstrapBreakpointValue('md');
+        const viewportWidth = window.innerWidth;
+
+        if (viewportWidth < smBreakpoint || (viewportWidth >= smBreakpoint && viewportWidth < mdBreakpoint && document.querySelector('.col-sm-12'))) {
+            document.body.classList.remove('custom-content-wrapper');
+        } else {
+            document.body.classList.add('custom-content-wrapper');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", updateBodyClass);
+    window.addEventListener("resize", updateBodyClass)
+</script>
 {% block javascripts %}{% endblock %}
 </body>
 </html>
