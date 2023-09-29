@@ -14,7 +14,7 @@
     {% endblock %}
 </head>
 {# <body class="hold-transition sidebar-mini layout-fixed"> #}
-<body class="layout-fixed custom-content-wrapper">
+<body class="layout-fixed custom-content-wrapper d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand navbar-white navbar-light">
     <div class="input-group input-group-sm mr-2">
         <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
@@ -35,7 +35,9 @@
 {#    </div> #}
 {# </aside> #}
 {# <div class="content-wrapper"> #}
-{% block body %}{% endblock %}
+<div class="flex-grow-1">
+    {% block body %}{% endblock %}
+</div>
 {# </div> #}
 <footer class="modal-footer d-flex justify-content-center align-items-center">
     <div>
