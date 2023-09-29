@@ -7,7 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class SearchManager
 {
-    public function __construct(protected EntityManagerInterface $entityManager)
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected DateManager            $dateManager,
+    )
     {
     }
 
@@ -34,6 +37,13 @@ class SearchManager
                     $queryBuilder->expr()->lower('at.lastName'), $queryBuilder->expr()->concat($queryBuilder->expr()->literal(' '), $queryBuilder->expr()->lower('at.firstName'))
                 ), ':text'
             ))->setParameter('text', $wrappedLowercaseText);
+
+        $date = $this->dateManager->createDateFromMultipleFormats($text);
+        if ($date) {
+            $queryBuilder
+                ->orWhere($queryBuilder->expr()->eq('r.publishedDate', ':date'))
+                ->setParameter('date', $date);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
