@@ -10,7 +10,7 @@
         "doctrine/dbal": "^3.6",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
-        "doctrine/orm": "*",
+        "doctrine/orm": "^2.9",
         "gedmo/doctrine-extensions": "^3.13",
         "moneyphp/money": "^3.3",
         "phpdocumentor/reflection-docblock": "^5.3",

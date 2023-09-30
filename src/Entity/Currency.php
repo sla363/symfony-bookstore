@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity()]
+#[ORM\Table(name: 'app_currency')]
 class Currency
 {
     use TimestampableTrait;

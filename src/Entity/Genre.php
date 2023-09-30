@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity()]
+#[ORM\Table(name: 'app_genre')]
 class Genre
 {
     use TimestampableTrait;

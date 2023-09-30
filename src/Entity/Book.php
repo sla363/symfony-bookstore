@@ -10,6 +10,7 @@ use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 
 #[ORM\Entity()]
+#[ORM\Table(name: 'app_book')]
 class Book
 {
     use TimestampableTrait;

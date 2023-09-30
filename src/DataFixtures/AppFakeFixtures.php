@@ -6,6 +6,8 @@ use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Currency;
 use App\Entity\Genre;
+use App\Entity\Role;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -24,6 +26,10 @@ class AppFakeFixtures extends Fixture
         $eurCurrency = new Currency();
         $eurCurrency->setCode('EUR');
         $manager->persist($eurCurrency);
+
+        $role = new Role();
+        $role->setName(User::ROLE_USER);
+        $manager->persist($role);
 
         $genres = [];
         for ($i = 0; $i < 10; $i++) {
