@@ -2,12 +2,18 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
 
 #[ORM\Entity()]
 class Book
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,17 +28,21 @@ class Book
     #[ORM\Column(length: 255)]
     private string $isbn;
 
-    #[ORM\Column(type: "text")]
+    #[ORM\Column(type: Types::TEXT)]
     private string $description;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $price;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $price;
 
-    #[ORM\ManyToOne(inversedBy: 'books')]
+    #[ORM\ManyToOne(targetEntity: Currency::class, inversedBy: 'books')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Currency $currency;
+
+    #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'books')]
     #[ORM\JoinColumn(nullable: false)]
     private Author $author;
 
-    #[ORM\ManyToOne(inversedBy: 'books')]
+    #[ORM\ManyToOne(targetEntity: Genre::class, inversedBy: 'books')]
     #[ORM\JoinColumn(nullable: false)]
     private Genre $genre;
 
@@ -89,14 +99,22 @@ class Book
         return $this;
     }
 
-    public function getPrice(): ?int
-    {
-        return $this->price;
+    public function getDisplayPrice(): float {
+        $money = new Money($this->price, new \Money\Currency($this->getCurrency()->getCode()));
+        $isoCurrencies = new ISOCurrencies();
+        $moneyFormatter = new DecimalMoneyFormatter($isoCurrencies);
+
+        return $moneyFormatter->format($money);
     }
 
-    public function setPrice(?int $price): static
+    public function getPrice(): Money
     {
-        $this->price = $price;
+        return new Money($this->price, new \Money\Currency($this->getCurrency()->getCode()));
+    }
+
+    public function setPrice(Money $price): static
+    {
+        $this->price = $price->getAmount();
         return $this;
     }
 
@@ -121,6 +139,17 @@ class Book
     {
         $this->genre = $genre;
 
+        return $this;
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(Currency $currency): static
+    {
+        $this->currency = $currency;
         return $this;
     }
 }

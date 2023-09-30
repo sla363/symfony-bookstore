@@ -9,7 +9,8 @@
             </div>
         {% elseif no_result is defined and no_result is same as false %}
             <div class="alert bg-info-subtle text-dark mr-2" role="alert">
-                <p class="mb-0">Found <strong>{{ books|length }}</strong> {{ books|length == 1 ? 'book' : 'books' }} matching your criteria.</p>
+                <p class="mb-0">Found <strong>{{ books|length }}</strong> {{ books|length == 1 ? 'book' : 'books' }}
+                    matching your criteria.</p>
             </div>
         {% endif %}
         <div class="row">
@@ -25,7 +26,7 @@
                             <div class="flex-grow-1 d-flex flex-column justify-content-end">
                                 <!-- This div will grow to take available space -->
                                 <p class="card-text text-sm mb-2 text-center">{{ book.author.fullName }}</p>
-                                <p class="card-text text-sm text-center text-bold">{{ book.price~' Kč' }}</p>
+                                <p class="card-text text-sm text-center text-bold">{{ book.displayPrice ~ ' ' ~ book.currency.code }}</p>
                                 <a href="#" class="btn-primary btn">Add to cart</a>
                             </div>
                         </div>
