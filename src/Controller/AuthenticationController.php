@@ -37,8 +37,8 @@ class AuthenticationController extends AbstractController
     }
 
     #[Route(path: '/register', name: 'app_register')]
-    public function register(UserPasswordHasherInterface $passwordHasher, Request $request, SecurityManager $securityManager, EntityManagerInterface $entityManager): Response {
-
+    public function register(UserPasswordHasherInterface $passwordHasher, Request $request, SecurityManager $securityManager, EntityManagerInterface $entityManager): Response
+    {
         $form = $this->createForm(RegisterFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

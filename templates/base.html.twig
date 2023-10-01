@@ -16,17 +16,35 @@
 {# <body class="hold-transition sidebar-mini layout-fixed"> #}
 <body class="layout-fixed custom-content-wrapper d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand navbar-white navbar-light">
-    <form action="{{ path('search_books') }}" method="get" class="d-flex align-items-center w-100">
-        <div class="input-group input-group-sm mr-2 w-100">
-            <input class="form-control form-control-navbar z-0" type="search" placeholder="Search" aria-label="Search"
-                   name="query">
-            <div class="input-group-append">
-                <button class="btn btn-navbar z-0" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
+    <div class="container-fluid">
+        <a href="{{ path('main_page') }}">
+            <button class="btn btn-sm btn-light text-nowrap mr-1">Main page</button>
+        </a>
+        <form action="{{ path('search_books') }}" method="get" class="d-flex align-items-center w-50">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-navbar z-0" type="search" placeholder="Search"
+                       aria-label="Search" name="query">
+                <div class="input-group-append">
+                    <button class="btn btn-navbar z-0" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="d-flex align-items-center justify-content-end mr-2 ml-2">
+                <span class="mr-2 my-auto text-nowrap">Welcome, <a
+                            href="{{ path('app_user_profile') }}">{{ app.user.email }}</a></span>
+                <a href="{{ path('app_logout') }}">
+                    <button class="btn btn-sm btn-info">Logout</button>
+                </a>
+            </div>
+        {% else %}
+            <a href="{{ path('app_login') }}">
+                <button class="btn btn-sm btn-info mr-2">Login</button>
+            </a>
+        {% endif %}
+    </div>
 </nav>
 
 {# <aside class="main-sidebar sidebar-dark-primary elevation-4"> #}
