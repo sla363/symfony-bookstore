@@ -15,6 +15,7 @@
 </head>
 {# <body class="hold-transition sidebar-mini layout-fixed"> #}
 <body class="layout-fixed custom-content-wrapper d-flex flex-column min-vh-100">
+{% block navbar %}
 <nav class="navbar navbar-expand navbar-white navbar-light">
     <div class="container-fluid">
         <a href="{{ path('main_page') }}">
@@ -46,6 +47,7 @@
         {% endif %}
     </div>
 </nav>
+{% endblock %}
 
 {# <aside class="main-sidebar sidebar-dark-primary elevation-4"> #}
 {#    <div class="sidebar"> #}

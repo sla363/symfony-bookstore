@@ -16,7 +16,7 @@
         <div class="row">
             {% for book in books %}
                 <div class="col-lg-3 col-md-4 col-sm-12 mb-4">
-                    <div class="card h-100 shadow-sm mr-2">
+                    <div class="card custom-card h-100 shadow-sm mr-2">
                         <a href="{{ path('book_resource', {'id': book.id}) }}">
                             <img src="https://picsum.photos/seed/{{ book.id }}/500/600" class="card-img-top"
                                  alt="{{ book.title }}">
