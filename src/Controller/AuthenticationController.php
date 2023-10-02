@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegisterFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -41,28 +42,44 @@ class AuthenticationController extends AbstractController
     {
         $form = $this->createForm(RegisterFormType::class);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $formData = $form->getData();
-            $user = new User();
+            $email = $formData['email'];
+            $password = $formData['password'];
+            $confirmPassword = $formData['confirm_password'];
 
-            $user->setEmail($formData['email']);
-
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $formData['password']
-            );
-            $user->setPassword($hashedPassword);
-
-            $roleUser = $securityManager->getRoleByName(User::ROLE_USER);
-            if (!$roleUser) {
-                throw new \Exception('User role does not exist, cannot create user.');
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+            if ($existingUser) {
+                $form->get('email')->addError(new FormError('A user with this email address already exists.'));
             }
-            $roleUser->addUser($user);
-            $user->addRole($roleUser);
-            $entityManager->persist($roleUser);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_login');
+
+            if ($password !== $confirmPassword) {
+                $form->get('confirm_password')->addError(new FormError('Passwords do not match.'));
+            }
+
+            if ($form->isValid()) {
+                $user = new User();
+
+                $user->setEmail($email);
+
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    $password
+                );
+                $user->setPassword($hashedPassword);
+
+                $roleUser = $securityManager->getRoleByName(User::ROLE_USER);
+                if (!$roleUser) {
+                    throw new \Exception('User role does not exist, cannot create user.');
+                }
+                $roleUser->addUser($user);
+                $user->addRole($roleUser);
+                $entityManager->persist($roleUser);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_login');
+            }
+
         }
 
         return $this->render('register.html.twig', [
