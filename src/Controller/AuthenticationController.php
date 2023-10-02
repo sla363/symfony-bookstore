@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegisterFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +39,13 @@ class AuthenticationController extends AbstractController
     }
 
     #[Route(path: '/register', name: 'app_register')]
-    public function register(UserPasswordHasherInterface $passwordHasher, Request $request, SecurityManager $securityManager, EntityManagerInterface $entityManager): Response
+    public function register(
+        UserPasswordHasherInterface $passwordHasher,
+        Request                     $request,
+        SecurityManager             $securityManager,
+        EntityManagerInterface      $entityManager,
+        Security                    $security
+    ): Response
     {
         $form = $this->createForm(RegisterFormType::class);
         $form->handleRequest($request);
@@ -61,7 +68,6 @@ class AuthenticationController extends AbstractController
                 $user = new User();
 
                 $user->setEmail($email);
-
                 $hashedPassword = $passwordHasher->hashPassword(
                     $user,
                     $password
@@ -77,7 +83,9 @@ class AuthenticationController extends AbstractController
                 $entityManager->persist($roleUser);
                 $entityManager->persist($user);
                 $entityManager->flush();
-                return $this->redirectToRoute('app_login');
+                $security->login($user);
+
+                return $this->redirectToRoute('main_page');
             }
 
         }
