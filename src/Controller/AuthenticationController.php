@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Form\RegisterFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -80,8 +81,13 @@ class AuthenticationController extends AbstractController
                 }
                 $roleUser->addUser($user);
                 $user->addRole($roleUser);
+
+                $cart = new Cart();
+                $cart->setUser($user);
+
                 $entityManager->persist($roleUser);
                 $entityManager->persist($user);
+                $entityManager->persist($cart);
                 $entityManager->flush();
                 $security->login($user);
 
