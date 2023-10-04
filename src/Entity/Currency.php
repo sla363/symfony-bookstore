@@ -46,4 +46,30 @@ class Currency
     {
         return $this->id;
     }
+
+    public function getBooks(): Collection
+    {
+        return $this->books;
+    }
+
+    public function setBooks(Collection $books): static
+    {
+        $this->books = $books;
+        return $this;
+    }
+
+    public function addBook(Book $book): static {
+        try {
+            $books = $this->getBooks();
+        } catch (\Error $e) {
+            $books = new ArrayCollection();
+        }
+        if ($books->isEmpty() || !$books->contains($book)) {
+            $books->add($book);
+            $this->setBooks($books);
+            $book->setCurrency($this);
+        }
+
+        return $this;
+    }
 }

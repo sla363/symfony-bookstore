@@ -33,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'app_user_role')]
     private Collection $userRoles;
 
+    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Cart::class)]
+    private Cart $cart;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();

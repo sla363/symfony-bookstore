@@ -74,10 +74,22 @@ class Author
         return $this->books;
     }
 
+    public function setBooks(Collection $books): static
+    {
+        $this->books = $books;
+        return $this;
+    }
+
     public function addBook(Book $book): static
     {
-        if (!$this->books->contains($book)) {
-            $this->books->add($book);
+        try {
+            $books = $this->getBooks();
+        } catch (\Error $e) {
+            $books = new ArrayCollection();
+        }
+        if ($books->isEmpty() || !$books->contains($book)) {
+            $books->add($book);
+            $this->setBooks($books);
             $book->setAuthor($this);
         }
 
