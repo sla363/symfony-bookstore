@@ -16,6 +16,7 @@ class Order
     private int $id;
 
     #[ORM\OneToOne(inversedBy: 'order', targetEntity: Transaction::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private Transaction $transaction;
 
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class)]
@@ -48,7 +49,8 @@ class Order
         return $this;
     }
 
-    public function addOrderItem(OrderItem $orderItem): static {
+    public function addOrderItem(OrderItem $orderItem): static
+    {
         try {
             $orderItems = $this->getOrderItems();
         } catch (\Error $e) {

@@ -18,6 +18,7 @@ class Transaction
     private string $identifier;
 
     #[ORM\OneToOne(mappedBy: 'transaction', targetEntity: Order::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private Order $order;
 
     public function getId(): int
