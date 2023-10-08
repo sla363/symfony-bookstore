@@ -61,6 +61,20 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart_cart');
     }
 
+    #[Route(path: '/clear-cart', name: 'app_cart_clear_cart')]
+    public function clearCart(): Response {
+        try {
+            $user = $this->userManager->getLoggedInUser($this->getUser());
+        } catch (\Exception $e) {
+            $this->addFlash('notice', 'You must be logged in to perform this action');
+            return $this->redirectToRoute('main_page');
+        }
+        if ($user) {
+            $this->cartManager->clearCart($user);
+        }
+        return $this->redirectToRoute('app_cart_cart');
+    }
+
     #[Route(path: '/cart', name: 'app_cart_cart')]
     public function cart(): Response
     {

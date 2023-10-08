@@ -6,15 +6,17 @@
     {# @var cart \App\Entity\Cart   #}
     <div class="container">
         <div class="row justify-content-center align-items-center">
-            <h1 class="mb-4">Your cart</h1>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <h1 class="mb-4 text-nowrap">Your cart</h1>
+            </div>
             <div class="row">
                 {% if cart.cartItems|length > 0 %}
                     <table class="table table-hover text-nowrap table-borderless mt-1">
                         <thead>
                         <tr>
-                            <th>Book title</th>
-                            <th>Price</th>
-                            <th>Action</th>
+                            <th class="align-middle">Book title</th>
+                            <th class="align-middle text-center">Price</th>
+                            <th class="align-middle text-center">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -22,24 +24,37 @@
                             {# @var cartItem \App\Entity\CartItem #}
                             <tr>
                                 <td>
-                                    <a href="{{ path('book_resource', {'id': cartItem.book.id}) }}">{{ cartItem.book.title }}</a>
+                                    <a href="{{ path('book_resource', {'id': cartItem.book.id}) }}">
+                                        {{ cartItem.book.title|length < 20 ? cartItem.book.title : cartItem.book.title|slice(0, 19)~'...' }}
+                                    </a>
                                 </td>
-                                <td>{{ cartItem.book.displayPrice ~ ' ' ~ cartItem.book.price.currency }}</td>
-                                <td><a href="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}"
-                                       class="btn-sm btn-danger">Remove</a></td>
+                                <td class="align-middle text-center">{{ cartItem.book.displayPrice ~ ' ' ~ cartItem.book.price.currency }}</td>
+                                <td class="align-middle text-center">
+                                    <a href="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger custom-cart-button">Remove
+                                        </button>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td class="text-bold">Total</td>
-                            <td class="text-bold">{{ total ~ ' ' ~ currency }}</td>
-                            <td><a href="{{ path('app_order_place_order') }}" class="btn btn-sm btn-warning">Place an order</a></td>
+                            <td class="text-bold align-middle">Total</td>
+                            <td class="text-bold align-middle text-center">{{ total ~ ' ' ~ currency }}</td>
+                            <td class="align-middle text-center">
+                                <a href="{{ path('app_order_place_order') }}">
+                                    <button type="submit" class="btn btn-sm btn-primary custom-cart-button">
+                                        Order
+                                    </button>
+                                </a>
+                            </td>
                         </tr>
                         </tfoot>
                     </table>
                 {% else %}
-                    You don't have any items in your cart yet.
+                    <p class="text-center">You don't have any items in your cart yet.</p>
                 {% endif %}
             </div>
         </div>

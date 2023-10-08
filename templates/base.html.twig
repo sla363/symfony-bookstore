@@ -35,14 +35,26 @@
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <div class="d-flex align-items-center justify-content-end mr-2 ml-2">
                     <div class="position-relative ml-2 mr-2">
-                        <a href="{{ path('app_cart_cart') }}">
-                            <i class="fas fa-shopping-cart"></i>
-                            {% if app.user.cart.cartItems|length > 0 %}
-                                <span class="badge badge-danger navbar-badge rounded-circle cart-badge">
-                                {{ app.user.cart.cartItems|length }}
-                                </span>
-                            {% endif %}
-                        </a>
+                        <div class="dropdown">
+                            <!-- Trigger for the dropdown menu -->
+                            <a href="#" class="dropdown-toggle d-flex align-items-center" role="button"
+                               id="dropdownCartLink"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="d-flex align-items-center flex-row-reverse">
+                                    {% if app.user.cart.cartItems|length > 0 %}
+                                        <span class="badge badge-danger navbar-badge rounded-circle cart-badge ml-2">
+                                            {{ app.user.cart.cartItems|length }}
+                                        </span>
+                                    {% endif %}
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                            </a>
+                            <!-- Dropdown Menu -->
+                            <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="dropdownCartLink">
+                                <a class="dropdown-item small" href="{{ path('app_cart_cart') }}">View cart</a>
+                                <a class="dropdown-item small" href="{{ path('app_cart_clear_cart') }}">Clear cart</a>
+                            </div>
+                        </div>
                     </div>
                     <span class="mr-2 my-auto text-nowrap"><a
                                 href="{{ path('app_user_profile') }}">{{ app.user.email }}</a></span>
