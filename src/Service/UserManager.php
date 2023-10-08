@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Controller\SecurityManager;
 use App\Entity\Cart;
 use App\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use SensitiveParameter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -51,5 +52,15 @@ class UserManager
         $this->entityManager->flush();
 
         return $user;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getLoggedInUser(?UserInterface $securityUser): ?User {
+        if (!$securityUser) {
+            throw new \Exception('User is not logged in.');
+        }
+        return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $securityUser->getUserIdentifier()]);
     }
 }
