@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use App\Service\OrderManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity()]
@@ -15,24 +17,33 @@ class Order
     #[ORM\Column]
     private int $id;
 
+    #[ORM\Column(type: Types::STRING, length: 10, nullable: false)]
+    private string $orderNumber;
+
     #[ORM\OneToOne(inversedBy: 'order', targetEntity: Transaction::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Transaction $transaction;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Transaction $transaction;
 
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class)]
     private Collection $orderItems;
+
+    public function __construct()
+    {
+        $this->orderItems = new ArrayCollection();
+    }
+
 
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getTransaction(): Transaction
+    public function getTransaction(): ?Transaction
     {
         return $this->transaction;
     }
 
-    public function setTransaction(Transaction $transaction): static
+    public function setTransaction(?Transaction $transaction): static
     {
         $this->transaction = $transaction;
         return $this;
@@ -62,6 +73,17 @@ class Order
             $orderItem->setOrder($this);
         }
 
+        return $this;
+    }
+
+    public function getOrderNumber(): string
+    {
+        return $this->orderNumber;
+    }
+
+    public function setOrderNumber(string $orderNumber): static
+    {
+        $this->orderNumber = $orderNumber;
         return $this;
     }
 }

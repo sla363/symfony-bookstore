@@ -56,6 +56,15 @@ class CartManager
         }
     }
 
+    public function clearCart(User $user): void {
+        $cart = $user->getCart();
+        foreach ($cart->getCartItems() as $cartItem) {
+            $this->entityManager->remove($cartItem);
+        }
+
+        $this->entityManager->flush();
+    }
+
     public function getCartItem(User $user, Book $book): ?CartItem
     {
         return $user->getCart()->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() === $book)->first() ?: null;

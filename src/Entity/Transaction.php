@@ -14,7 +14,7 @@ class Transaction
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, length: 10, nullable: false)]
     private string $identifier;
 
     #[ORM\OneToOne(mappedBy: 'transaction', targetEntity: Order::class)]

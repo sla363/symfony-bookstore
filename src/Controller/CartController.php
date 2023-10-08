@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\CartManager;
 use App\Entity\Book;
+use App\Service\OrderManager;
 use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ class CartController extends AbstractController
         protected CartManager            $cartManager,
         protected EntityManagerInterface $entityManager,
         protected UserManager            $userManager,
+        protected OrderManager           $orderManager,
     )
     {
     }
