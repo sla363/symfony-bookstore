@@ -21,7 +21,11 @@
                     <p class="card-text">{{ book.description }}</p>
                 </div>
                 <div class="mt-auto">
-                    <a href="#" class="btn btn-primary">Add to cart</a>
+                    <a href="{{ path('app_cart_add', {'book': book.id}) }}">
+                        <button type="submit" class="btn-primary btn" {% if not app.user %}disabled{% endif %}>Add to
+                            cart
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
