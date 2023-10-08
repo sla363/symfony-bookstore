@@ -30,11 +30,16 @@
                                 <!-- This div will grow to take available space -->
                                 <p class="card-text text-sm mb-2 text-center">{{ book.author.fullName }}</p>
                                 <p class="card-text text-sm text-center text-bold">{{ book.displayPrice ~ ' ' ~ book.currency.code }}</p>
-                                <a href="{{ path('app_cart_add', {'book': book.id}) }}">
+                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                    <a href="{{ path('app_cart_add', {'book': book.id}) }}">
+                                        <button type="submit" class="btn-primary btn">Add to cart
+                                        </button>
+                                    </a>
+                                {% else %}
                                     <button type="submit" class="btn-primary btn"
-                                            {% if not app.user %}disabled{% endif %}>Add to cart
+                                            disabled>Add to cart
                                     </button>
-                                </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
