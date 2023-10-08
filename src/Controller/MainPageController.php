@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Service\CartManager;
 use App\Service\SearchManager;
+use App\Service\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainPageController extends AbstractController
 {
-    public function __construct(protected SearchManager $searchManager)
+    public function __construct(
+        protected SearchManager $searchManager,
+        protected CartManager   $cartManager,
+        protected UserManager   $userManager,
+    )
     {
     }
 
@@ -26,8 +32,15 @@ class MainPageController extends AbstractController
     #[Route(path: '/book/{id}', name: 'book_resource')]
     public function book(Book $book): Response
     {
+        $user = null;
+        try {
+            $user = $this->userManager->getLoggedInUser($this->getUser());
+        } catch (\Exception $e) {
+            $this->addFlash('notice', 'You must be logged in to perform this action');
+        }
         return $this->render('book_resource.html.twig', [
-            'book' => $book
+            'book' => $book,
+            'cartItem' => $user ? $this->cartManager->getCartItem($user, $book) : null,
         ]);
     }
 

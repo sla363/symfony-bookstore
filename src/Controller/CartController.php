@@ -8,6 +8,7 @@ use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CartController extends AbstractController
@@ -21,7 +22,7 @@ class CartController extends AbstractController
     }
 
     #[Route(path: '/add-to-cart/{book}', name: 'app_cart_add')]
-    public function add(Book $book): Response
+    public function add(Request $request, Book $book): Response
     {
         $user = null;
         try {
@@ -32,7 +33,30 @@ class CartController extends AbstractController
         if ($user) {
             $this->cartManager->addItemToCart($user, $book);
         }
+
+        if ($request->get('redirect_to_route')) {
+            return $this->redirectToRoute($request->get('redirect_to_route'), ['id' => $book->getId()]);
+        }
         return $this->redirectToRoute('main_page');
+    }
+
+    #[Route(path: '/remove-from-cart/{book}', name: 'app_cart_remove')]
+    public function remove(Request $request, Book $book): Response
+    {
+        $user = null;
+        try {
+            $user = $this->userManager->getLoggedInUser($this->getUser());
+        } catch (\Exception $e) {
+            $this->addFlash('notice', 'You must be logged in to perform this action');
+        }
+        if ($user) {
+            $this->cartManager->removeItemFromCart($user, $book);
+        }
+
+        if ($request->get('redirect_to_route')) {
+            return $this->redirectToRoute($request->get('redirect_to_route'), ['id' => $book->getId()]);
+        }
+        return $this->redirectToRoute('app_cart_cart');
     }
 
     #[Route(path: '/cart', name: 'app_cart_cart')]
@@ -48,8 +72,8 @@ class CartController extends AbstractController
             //TODO adjust currency retrieval logic
             return $this->render('cart.html.twig', [
                 'cart' => $user->getCart(),
-                'total' => $this->cartManager->getTotalSumInCartDisplayPrice($user->getCart()),
-                'currency' => $this->cartManager->getBooksFromCart($user->getCart())->first()?->getCurrency()->getCode()
+                'total' => $user->getCart()->getCartItems()->isEmpty() ? 0 : $this->cartManager->getTotalSumInCartDisplayPrice($user->getCart()),
+                'currency' => $user->getCart()->getCartItems()->isEmpty() ? '' : $this->cartManager->getBooksFromCart($user->getCart())->first()?->getCurrency()->getCode()
             ]);
         }
         return $this->redirectToRoute('main_page');

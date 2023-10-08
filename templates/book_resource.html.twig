@@ -21,11 +21,18 @@
                     <p class="card-text">{{ book.description }}</p>
                 </div>
                 <div class="mt-auto">
-                    <a href="{{ path('app_cart_add', {'book': book.id}) }}">
+                    <a href="{{ path('app_cart_add', {'book': book.id, 'redirect_to_route': 'book_resource'}) }}">
                         <button type="submit" class="btn-primary btn" {% if not app.user %}disabled{% endif %}>Add to
                             cart
                         </button>
                     </a>
+                    {% if cartItem is defined and cartItem is not null %}
+                        <a href="{{ path('app_cart_remove', {'book': cartItem.book.id, 'redirect_to_route': 'book_resource'}) }}">
+                            <button type="submit" class="btn btn-danger" {% if not app.user %}disabled{% endif %}>
+                                Remove from cart
+                            </button>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

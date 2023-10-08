@@ -6,6 +6,7 @@ use App\Entity\Book;
 use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Currencies\ISOCurrencies;
@@ -38,6 +39,26 @@ class CartManager
             $this->entityManager->persist($cartItem);
             $this->entityManager->flush();
         }
+    }
+
+    public function removeItemFromCart(User $user, Book $book): void
+    {
+        $cart = $user->getCart();
+        $booksInCart = $this->getBooksFromCart($cart);
+        if ($booksInCart->contains($book)) {
+            $updatedCartItems = $cart->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() !== $book);
+            $cardItemToRemove = $cart->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() === $book)->first();
+            $cart->setCartItems(new ArrayCollection($updatedCartItems->toArray()));
+            $this->entityManager->remove($cardItemToRemove);
+
+            $this->entityManager->persist($cart);
+            $this->entityManager->flush();
+        }
+    }
+
+    public function getCartItem(User $user, Book $book): ?CartItem
+    {
+        return $user->getCart()->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() === $book)->first() ?: null;
     }
 
     public function getBooksFromCart(Cart $cart): ReadableCollection

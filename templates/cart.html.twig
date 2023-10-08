@@ -8,31 +8,38 @@
         <div class="row justify-content-center align-items-center">
             <h1 class="mb-4">Your cart</h1>
             <div class="row">
-                <table class="table table-hover text-nowrap table-borderless mt-1">
-                    <thead>
-                    <tr>
-                        <th>Book title</th>
-                        <th>Price</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for cartItem in cart.cartItems %}
-                        {# @var cartItem \App\Entity\CartItem #}
+                {% if cart.cartItems|length > 0 %}
+                    <table class="table table-hover text-nowrap table-borderless mt-1">
+                        <thead>
                         <tr>
-                            <td>
-                                <a href="{{ path('book_resource', {'id': cartItem.book.id}) }}">{{ cartItem.book.title }}</a>
-                            </td>
-                            <td>{{ cartItem.book.displayPrice ~ ' ' ~ cartItem.book.price.currency }}</td>
+                            <th>Book title</th>
+                            <th>Price</th>
+                            <th>Action</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <td class="text-bold">Total</td>
-                        <td class="text-bold">{{ total ~ ' ' ~ currency }}</td>
-                    </tr>
-                    </tfoot>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for cartItem in cart.cartItems %}
+                            {# @var cartItem \App\Entity\CartItem #}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('book_resource', {'id': cartItem.book.id}) }}">{{ cartItem.book.title }}</a>
+                                </td>
+                                <td>{{ cartItem.book.displayPrice ~ ' ' ~ cartItem.book.price.currency }}</td>
+                                <td><a href="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}"
+                                       class="btn-sm btn-danger">Remove</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-bold">Total</td>
+                            <td class="text-bold">{{ total ~ ' ' ~ currency }}</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                {% else %}
+                    You don't have any items in your cart yet.
+                {% endif %}
             </div>
         </div>
     </div>
