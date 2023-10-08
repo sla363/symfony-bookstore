@@ -4,11 +4,11 @@
 {% block body %}
     <div class="container-fluid">
         {% if no_result is defined and no_result is same as true %}
-            <div class="alert bg-warning-subtle text-dark mr-2" role="alert">
+            <div class="alert bg-warning-subtle text-dark" role="alert">
                 <p class="mb-0">No books found matching your criteria. Showing all books.</p>
             </div>
         {% elseif no_result is defined and no_result is same as false %}
-            <div class="alert bg-info-subtle text-dark mr-2" role="alert">
+            <div class="alert bg-info-subtle text-dark" role="alert">
                 <p class="mb-0">Found <strong>{{ books|length }}</strong> {{ books|length == 1 ? 'book' : 'books' }}
                     matching your criteria.</p>
             </div>
@@ -16,7 +16,7 @@
         <div class="row">
             {% for book in books %}
                 <div class="col-lg-3 col-md-4 col-sm-12 mb-4">
-                    <div class="card h-100 custom-card mr-2">
+                    <div class="card h-100 custom-card">
                         <a href="{{ path('book_resource', {'id': book.id}) }}">
                             <img src="https://picsum.photos/seed/{{ book.id }}/500/600" class="card-img-top"
                                  alt="{{ book.title }}">

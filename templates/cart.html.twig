@@ -16,7 +16,7 @@
                         <tr>
                             <th class="align-middle">Book title</th>
                             <th class="align-middle text-center">Price</th>
-                            <th class="align-middle text-center">Action</th>
+                            <th class="align-middle text-right pr-4">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -29,7 +29,7 @@
                                     </a>
                                 </td>
                                 <td class="align-middle text-center">{{ cartItem.book.displayPrice ~ ' ' ~ cartItem.book.price.currency }}</td>
-                                <td class="align-middle text-center">
+                                <td class="align-middle text-right">
                                     <a href="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger custom-cart-button">Remove
@@ -43,7 +43,7 @@
                         <tr>
                             <td class="text-bold align-middle">Total</td>
                             <td class="text-bold align-middle text-center">{{ total ~ ' ' ~ currency }}</td>
-                            <td class="align-middle text-center">
+                            <td class="align-middle text-right">
                                 <a href="{{ path('app_order_place_order') }}">
                                     <button type="submit" class="btn btn-sm btn-primary custom-cart-button">
                                         Order

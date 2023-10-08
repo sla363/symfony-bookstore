@@ -33,11 +33,11 @@
                 </div>
             </form>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <div class="d-flex align-items-center justify-content-end mr-2 ml-2">
+                <div class="d-flex align-items-center justify-content-end">
                     <div class="position-relative ml-2 mr-2">
                         <div class="dropdown">
                             <!-- Trigger for the dropdown menu -->
-                            <a href="#" class="dropdown-toggle d-flex align-items-center" role="button"
+                            <a href="#" class="dropdown-toggle d-flex align-items-center text-dark" role="button"
                                id="dropdownCartLink"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div class="d-flex align-items-center flex-row-reverse">
@@ -56,16 +56,42 @@
                             </div>
                         </div>
                     </div>
-                    <span class="mr-2 my-auto text-nowrap"><a
-                                href="{{ path('app_user_profile') }}">{{ app.user.email }}</a></span>
-                    <a href="{{ path('app_logout') }}">
-                        <button class="btn btn-sm btn-info mr-0">Logout</button>
-                    </a>
+{#                    <span class="mr-2 my-auto text-nowrap"><a#}
+{#                                href="{{ path('app_user_profile') }}">{{ app.user.email }}</a></span>#}
+{#                    <a href="{{ path('app_logout') }}">#}
+{#                        <button class="btn btn-sm btn-info mr-0">Logout</button>#}
+{#                    </a>#}
+                    <div class="dropdown ml-3">
+                        <!-- Trigger for the dropdown menu -->
+                        <a href="#" class="dropdown-toggle d-flex align-items-center text-dark" role="button"
+                           id="dropdownProfileLink"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="d-flex align-items-center flex-row-reverse">
+                                <i class="fas fa-user text-black"></i>
+                            </div>
+                        </a>
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="dropdownProfileLink">
+                            <a class="dropdown-item small" href="{{ path('app_user_profile') }}">My profile</a>
+                            <a class="dropdown-item small" href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    </div>
                 </div>
             {% else %}
-                <a href="{{ path('app_login') }}">
-                    <button class="btn btn-sm btn-info mr-2">Login</button>
-                </a>
+                <div class="dropdown ml-3">
+                    <!-- Trigger for the dropdown menu -->
+                    <a href="#" class="dropdown-toggle d-flex align-items-center text-dark" role="button"
+                       id="dropdownProfileLink"
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="d-flex align-items-center flex-row-reverse">
+                            <i class="fas fa-user text-black"></i>
+                        </div>
+                    </a>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="dropdownProfileLink">
+                        <a class="dropdown-item small" href="{{ path('app_login') }}">Login</a>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </nav>
