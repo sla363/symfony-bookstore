@@ -35,7 +35,7 @@
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <div class="d-flex align-items-center justify-content-end mr-2 ml-2">
                     <div class="position-relative ml-2 mr-2">
-                        <a href="#">
+                        <a href="{{ path('app_cart_cart') }}">
                             <i class="fas fa-shopping-cart"></i>
                             {% if app.user.cart.cartItems|length > 0 %}
                                 <span class="badge badge-danger navbar-badge rounded-circle cart-badge">
@@ -47,7 +47,7 @@
                     <span class="mr-2 my-auto text-nowrap"><a
                                 href="{{ path('app_user_profile') }}">{{ app.user.email }}</a></span>
                     <a href="{{ path('app_logout') }}">
-                        <button class="btn btn-sm btn-info">Logout</button>
+                        <button class="btn btn-sm btn-info mr-0">Logout</button>
                     </a>
                 </div>
             {% else %}

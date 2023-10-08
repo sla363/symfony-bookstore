@@ -8,6 +8,10 @@ use App\Entity\CartItem;
 use App\Entity\User;
 use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
 
 class CartManager
 {
@@ -39,5 +43,28 @@ class CartManager
     public function getBooksFromCart(Cart $cart): ReadableCollection
     {
         return $cart->getCartItems()->map(fn(CartItem $cartItem) => $cartItem->getBook());
+    }
+
+    public function getTotalSumInCart(Cart $cart): Money
+    {
+        $books = $this->getBooksFromCart($cart);
+        //TODO adjust the logic of retrieving the currency and calculating total amount
+        $total = new Money(0, new Currency($books->first()?->getCurrency()->getCode()));
+        foreach ($books as $book) {
+            /** @var Book $book */
+            $total = $total->add($book->getPrice());
+        }
+
+        return $total;
+    }
+
+    public function getTotalSumInCartDisplayPrice(Cart $cart): float
+    {
+        $total = $this->getTotalSumInCart($cart);
+
+        $isoCurrencies = new ISOCurrencies();
+        $moneyFormatter = new DecimalMoneyFormatter($isoCurrencies);
+
+        return $moneyFormatter->format($total);
     }
 }
