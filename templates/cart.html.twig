@@ -28,7 +28,7 @@
                                         {{ cartItem.book.title|length < 20 ? cartItem.book.title : cartItem.book.title|slice(0, 19)~'...' }}
                                     </a>
                                 </td>
-                                <td class="align-middle text-center">{{ cartItem.book.displayPrice ~ ' ' ~ cartItem.book.price.currency }}</td>
+                                <td class="align-middle text-center">{{ money_manager.formattedPrice(cartItem.book.price) ~ ' ' ~ cartItem.book.price.currency }}</td>
                                 <td class="align-middle text-right">
                                     <a href="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}">
                                         <button type="submit"

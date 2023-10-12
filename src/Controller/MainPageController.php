@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Service\CartManager;
+use App\Service\MoneyManager;
 use App\Service\SearchManager;
 use App\Service\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ class MainPageController extends AbstractController
         protected SearchManager $searchManager,
         protected CartManager   $cartManager,
         protected UserManager   $userManager,
+        protected MoneyManager  $moneyManager,
     )
     {
     }

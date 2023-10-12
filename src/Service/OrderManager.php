@@ -8,12 +8,15 @@ use App\Entity\Transaction;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Currency;
+use Money\Money;
 
 class OrderManager
 {
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected TransactionManager     $transactionManager,
+        protected MoneyManager           $moneyManager,
     )
     {
     }
@@ -50,7 +53,9 @@ class OrderManager
             $this->entityManager->persist($orderItem);
         }
         $order->setOrderItems($orderItems);
+        $user->addOrder($order);
 
+        $this->entityManager->persist($user);
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
@@ -62,5 +67,29 @@ class OrderManager
 
         $this->entityManager->persist($transaction);
         $this->entityManager->flush();
+    }
+
+    public function getOrdersForUser(User $user): array
+    {
+        return $this->entityManager->getRepository(Order::class)->findBy(['user' => $user]);
+    }
+
+    public function getTotalPriceForOrder(Order $order): Money
+    {
+        $orderItems = $order->getOrderItems();
+        //TODO resolve getting the right currency
+        $currencyCode = $this->entityManager->getRepository(Currency::class)->findOneBy(['code' => 'CZK']);
+        $totalPrice = new Money(0, new \Money\Currency($currencyCode->getCode()));
+
+        foreach ($orderItems as $orderItem) {
+            /** @var OrderItem $orderItem */
+            //TODO resolve getting the right currency
+            $totalItemPrice = new Money(0, new \Money\Currency($currencyCode->getCode()));
+            $totalItemPrice = $totalItemPrice->add($orderItem->getItemPrice());
+            $totalItemPrice = $totalItemPrice->multiply($orderItem->getQuantity());
+            $totalPrice = $totalPrice->add($totalItemPrice);
+        }
+
+        return $totalPrice;
     }
 }

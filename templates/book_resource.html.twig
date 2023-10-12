@@ -17,7 +17,9 @@
                     <p class="card-text mb-1"><strong>Published date:</strong> {{ book.publishedDate.format('Y-m-d') }}
                     </p>
                     <p class="card-text mb-1"><strong>Genre:</strong> {{ book.genre.name }}</p>
-                    <p class="card-text"><strong>Price:</strong> {{ book.displayPrice ~ ' ' ~ book.currency.code }}</p>
+                    <p class="card-text">
+                        <strong>Price:</strong> {{ money_manager.formattedPrice(book.price) ~ ' ' ~ book.currency.code }}
+                    </p>
                     <p class="card-text">{{ book.description }}</p>
                 </div>
                 <div class="mt-auto">

@@ -9,15 +9,14 @@ use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Money\Currencies\ISOCurrencies;
 use Money\Currency;
-use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 
 class CartManager
 {
     public function __construct(
         protected EntityManagerInterface $entityManager,
+        protected MoneyManager           $moneyManager,
     )
     {
     }
@@ -56,7 +55,8 @@ class CartManager
         }
     }
 
-    public function clearCart(User $user): void {
+    public function clearCart(User $user): void
+    {
         $cart = $user->getCart();
         foreach ($cart->getCartItems() as $cartItem) {
             $this->entityManager->remove($cartItem);
@@ -91,10 +91,6 @@ class CartManager
     public function getTotalSumInCartDisplayPrice(Cart $cart): float
     {
         $total = $this->getTotalSumInCart($cart);
-
-        $isoCurrencies = new ISOCurrencies();
-        $moneyFormatter = new DecimalMoneyFormatter($isoCurrencies);
-
-        return $moneyFormatter->format($total);
+        return $this->moneyManager->getFormattedPrice($total);
     }
 }

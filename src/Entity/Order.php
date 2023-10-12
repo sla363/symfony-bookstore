@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Order
 {
     use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -28,6 +29,10 @@ class Order
 
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class)]
     private Collection $orderItems;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private User $user;
 
     public function __construct()
     {
@@ -86,6 +91,17 @@ class Order
     public function setOrderNumber(string $orderNumber): static
     {
         $this->orderNumber = $orderNumber;
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 }

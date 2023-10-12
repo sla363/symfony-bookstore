@@ -3,11 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Money\Currencies\ISOCurrencies;
-use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 
 #[ORM\Entity()]
@@ -15,6 +12,7 @@ use Money\Money;
 class OrderItem
 {
     use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -71,13 +69,6 @@ class OrderItem
     {
         $this->itemPrice = $itemPrice->getAmount();
         return $this;
-    }
-
-    public function getItemDisplayPrice(): float {
-        $isoCurrencies = new ISOCurrencies();
-        $moneyFormatter = new DecimalMoneyFormatter($isoCurrencies);
-
-        return $moneyFormatter->format($this->getItemPrice());
     }
 
     public function getQuantity(): int

@@ -39,4 +39,22 @@ class OrderController extends AbstractController
         }
         return $this->redirectToRoute('main_page');
     }
+
+    #[Route(path: '/orders', name: 'app_order_view_orders')]
+    public function viewOrders(): Response
+    {
+        $user = null;
+        try {
+            $user = $this->userManager->getLoggedInUser($this->getUser());
+        } catch (\Exception $e) {
+            $this->addFlash('notice', 'You must be logged in to perform this action');
+        }
+        if ($user) {
+            return $this->render('orders.html.twig', [
+                'orders' => $this->orderManager->getOrdersForUser($user),
+                'order_manager' => $this->orderManager,
+            ]);
+        }
+        return $this->redirectToRoute('main_page');
+    }
 }

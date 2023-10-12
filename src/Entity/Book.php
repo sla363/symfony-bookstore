@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Money\Currencies\ISOCurrencies;
-use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
@@ -116,14 +114,6 @@ class Book
         return $this;
     }
 
-    public function getDisplayPrice(): float {
-        $money = new Money($this->price, new \Money\Currency($this->getCurrency()->getCode()));
-        $isoCurrencies = new ISOCurrencies();
-        $moneyFormatter = new DecimalMoneyFormatter($isoCurrencies);
-
-        return $moneyFormatter->format($money);
-    }
-
     public function getPrice(): Money
     {
         return new Money($this->price, new \Money\Currency($this->getCurrency()->getCode()));
@@ -181,7 +171,8 @@ class Book
         return $this;
     }
 
-    public function addOrderItem(OrderItem $orderItem): static {
+    public function addOrderItem(OrderItem $orderItem): static
+    {
         try {
             $orderItems = $this->getOrderItems();
         } catch (\Error $e) {
@@ -206,7 +197,8 @@ class Book
         return $this;
     }
 
-    public function addCartItem(CartItem $cartItem): static {
+    public function addCartItem(CartItem $cartItem): static
+    {
         try {
             $cartItems = $this->getCartItems();
         } catch (\Error $e) {

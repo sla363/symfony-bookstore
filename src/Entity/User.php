@@ -37,9 +37,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: true)]
     private ?Cart $cart;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): int
@@ -128,6 +132,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCart(?Cart $cart): static
     {
         $this->cart = $cart;
+        return $this;
+    }
+
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(Collection $orders): static
+    {
+        $this->orders = $orders;
+        return $this;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        try {
+            $orders = $this->getOrders();
+        } catch (\Error $error) {
+            $orders = new ArrayCollection();
+        }
+        if ($orders->isEmpty() || !$orders->contains($order)) {
+            $orders->add($order);
+            $this->setOrders($orders);
+            $order->setUser($this);
+        }
+
         return $this;
     }
 
