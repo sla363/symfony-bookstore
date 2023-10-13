@@ -19,4 +19,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer install --prefer-dist --no-scripts --no-dev --no-interaction
 
+COPY my-php.ini $PHP_INI_DIR/conf.d/
+
 EXPOSE 80

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait TimestampableTrait
 {
     #[Gedmo\Timestampable(on: "create")]
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     protected \DateTimeImmutable $createdAt;
 
     #[Gedmo\Timestampable(on: "update")]

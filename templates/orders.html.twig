@@ -13,9 +13,9 @@
                     <table class="table table-hover text-nowrap table-borderless mt-1">
                         <thead>
                         <tr>
-                            <th class="align-middle">Order number</th>
-                            <th class="align-middle text-center">Total price</th>
-                            <th class="align-middle text-right pr-4">Action</th>
+                            <th class="align-middle">Date of order</th>
+                            <th class="align-middle text-center">Order number</th>
+                            <th class="align-middle text-right pr-4">Total price</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -23,35 +23,20 @@
                             {# @var order \App\Entity\Order #}
                             <tr>
                                 <td>
+                                    {{ order.createdAt|date('Y-m-d H:i:s') }}
+                                </td>
+                                {#                                TODO resolve getting the currency correctly #}
+                                <td class="align-middle text-center">
                                     {#                                    <a href="{{ path('book_resource', {'id': cartItem.book.id}) }}"> #}
                                     {{ order.orderNumber }}
                                     {#                                    </a> #}
                                 </td>
-                                {#                                TODO resolve getting the currency correctly #}
-                                <td class="align-middle text-center">{{ money_manager.formattedPrice(order_manager.totalPriceForOrder(order)) ~ ' ' ~ order.orderItems.first.book.currency.code }}</td>
                                 <td class="align-middle text-right">
-                                    {#                                    <a href="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}"> #}
-                                    {#                                        <button type="submit" #}
-                                    {#                                                class="btn btn-sm btn-danger custom-cart-button">Remove #}
-                                    {#                                        </button> #}
-                                    {#                                    </a> #}
+                                    {{ money_manager.formattedPrice(order_manager.totalPriceForOrder(order)) ~ ' ' ~ order.orderItems.first.book.currency.code }}
                                 </td>
                             </tr>
                         {% endfor %}
                         </tbody>
-                        {#                        <tfoot> #}
-                        {#                        <tr> #}
-                        {#                            <td class="text-bold align-middle">Total</td> #}
-                        {#                            <td class="text-bold align-middle text-center">{{ total ~ ' ' ~ currency }}</td> #}
-                        {#                            <td class="align-middle text-right"> #}
-                        {#                                <a href="{{ path('app_order_place_order') }}"> #}
-                        {#                                    <button type="submit" class="btn btn-sm btn-primary custom-cart-button"> #}
-                        {#                                        Order #}
-                        {#                                    </button> #}
-                        {#                                </a> #}
-                        {#                            </td> #}
-                        {#                        </tr> #}
-                        {#                        </tfoot> #}
                     </table>
                 {% else %}
                     <p class="text-center">You haven't placed any orders yet.</p>
