@@ -23,7 +23,7 @@ class CartController extends AbstractController
     {
     }
 
-    #[Route(path: '/add-to-cart/{book}', name: 'app_cart_add')]
+    #[Route(path: '/cart/{book}', name: 'app_cart_add', methods: Request::METHOD_POST)]
     public function add(Request $request, Book $book): Response
     {
         $user = null;
@@ -42,7 +42,7 @@ class CartController extends AbstractController
         return $this->redirectToRoute('main_page');
     }
 
-    #[Route(path: '/remove-from-cart/{book}', name: 'app_cart_remove')]
+    #[Route(path: '/cart/{book}', name: 'app_cart_remove', methods: Request::METHOD_DELETE)]
     public function remove(Request $request, Book $book): Response
     {
         $user = null;
@@ -61,7 +61,7 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart_cart');
     }
 
-    #[Route(path: '/clear-cart', name: 'app_cart_clear_cart')]
+    #[Route(path: '/cart', name: 'app_cart_clear_cart', methods: Request::METHOD_DELETE)]
     public function clearCart(): Response {
         try {
             $user = $this->userManager->getLoggedInUser($this->getUser());
@@ -75,7 +75,7 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart_cart');
     }
 
-    #[Route(path: '/cart', name: 'app_cart_cart')]
+    #[Route(path: '/cart', name: 'app_cart_cart', methods: Request::METHOD_GET)]
     public function cart(): Response
     {
         try {

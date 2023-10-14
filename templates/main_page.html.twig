@@ -31,10 +31,9 @@
                                 <p class="card-text text-sm mb-2 text-center">{{ book.author.fullName }}</p>
                                 <p class="card-text text-sm text-center text-bold">{{ money_manager.formattedPrice(book.price) ~ ' ' ~ book.currency.code }}</p>
                                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                                    <a href="{{ path('app_cart_add', {'book': book.id}) }}">
-                                        <button type="submit" class="btn-primary btn">Add to cart
-                                        </button>
-                                    </a>
+                                    <form action="{{ path('app_cart_add', {'book': book.id}) }}" method="post">
+                                        <button type="submit" class="btn-primary btn">Add to cart</button>
+                                    </form>
                                 {% else %}
                                     <button type="submit" class="btn-primary btn"
                                             disabled>Add to cart

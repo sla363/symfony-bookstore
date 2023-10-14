@@ -30,11 +30,12 @@
                                 </td>
                                 <td class="align-middle text-center">{{ money_manager.formattedPrice(cartItem.book.price) ~ ' ' ~ cartItem.book.price.currency }}</td>
                                 <td class="align-middle text-right">
-                                    <a href="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}">
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger custom-cart-button">Remove
+                                    <form action="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger custom-cart-button" {% if not app.user %}disabled{% endif %}>
+                                            Remove
                                         </button>
-                                    </a>
+                                        <input type="hidden" name="_method" value="DELETE">
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}

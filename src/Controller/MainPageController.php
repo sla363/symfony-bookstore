@@ -23,7 +23,7 @@ class MainPageController extends AbstractController
     {
     }
 
-    #[Route(path: '/', name: 'main_page')]
+    #[Route(path: '/', name: 'main_page', methods: Request::METHOD_GET)]
     public function mainPage(): Response
     {
         return $this->render('main_page.html.twig', [
@@ -31,7 +31,7 @@ class MainPageController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/book/{id}', name: 'book_resource')]
+    #[Route(path: '/books/{id}', name: 'book_resource', methods: Request::METHOD_GET)]
     public function book(Book $book): Response
     {
         $user = null;
@@ -46,7 +46,7 @@ class MainPageController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/search', name: 'search_books')]
+    #[Route(path: '/books/search', name: 'search_books', methods: Request::METHOD_GET)]
     public function searchBooks(Request $request): Response
     {
         $query = $request->query->get('query');

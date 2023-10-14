@@ -52,7 +52,10 @@
                             <!-- Dropdown Menu -->
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-sm-end" aria-labelledby="dropdownCartLink">
                                 <a class="dropdown-item small" href="{{ path('app_cart_cart') }}">View cart</a>
-                                <a class="dropdown-item small" href="{{ path('app_cart_clear_cart') }}">Clear cart</a>
+                                <form action="{{ path('app_cart_clear_cart') }}" method="post">
+                                    <button class="dropdown-item small">Clear cart</button>
+                                    <input type="hidden" name="_method" value="DELETE">
+                                </form>
                             </div>
                         </div>
                     </div>

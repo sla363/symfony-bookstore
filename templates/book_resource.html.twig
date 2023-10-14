@@ -22,23 +22,23 @@
                     </p>
                     <p class="card-text">{{ book.description }}</p>
                 </div>
-                <div class="mt-auto">
-                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <a href="{{ path('app_cart_add', {'book': book.id}) }}">
-                            <button type="submit" class="btn-primary btn">Add to cart
-                            </button>
-                        </a>
-                    {% else %}
-                        <button type="submit" class="btn-primary btn"
-                                disabled>Add to cart
-                        </button>
-                    {% endif %}
+                <div class="mt-auto row">
+                    <div class="col-auto">
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <form action="{{ path('app_cart_add', {'book': book.id}) }}" method="post">
+                                <button type="submit" class="btn btn-primary">Add to cart</button>
+                            </form>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary" disabled>Add to cart</button>
+                        {% endif %}
+                    </div>
                     {% if cartItem is defined and cartItem is not null %}
-                        <a href="{{ path('app_cart_remove', {'book': cartItem.book.id, 'redirect_to_route': 'book_resource'}) }}">
-                            <button type="submit" class="btn btn-danger" {% if not app.user %}disabled{% endif %}>
-                                Remove from cart
-                            </button>
-                        </a>
+                        <div class="col-auto">
+                            <form action="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}" method="post">
+                                <button type="submit" class="btn btn-danger" {% if not app.user %}disabled{% endif %}>Remove from cart</button>
+                                <input type="hidden" name="_method" value="DELETE">
+                            </form>
+                        </div>
                     {% endif %}
                 </div>
             </div>

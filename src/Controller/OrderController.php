@@ -7,6 +7,7 @@ use App\Service\OrderManager;
 use App\Service\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OrderController extends AbstractController
@@ -20,7 +21,7 @@ class OrderController extends AbstractController
     }
 
 
-    #[Route(path: '/place-order', name: 'app_order_place_order')]
+    #[Route(path: '/orders', name: 'app_order_place_order', methods: Request::METHOD_POST)]
     public function placeOrder(): Response
     {
         $user = null;
@@ -40,7 +41,7 @@ class OrderController extends AbstractController
         return $this->redirectToRoute('main_page');
     }
 
-    #[Route(path: '/orders', name: 'app_order_view_orders')]
+    #[Route(path: '/orders', name: 'app_order_view_orders', methods: Request::METHOD_GET)]
     public function viewOrders(): Response
     {
         $user = null;
