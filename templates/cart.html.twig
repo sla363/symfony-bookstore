@@ -45,11 +45,11 @@
                             <td class="text-bold align-middle">Total</td>
                             <td class="text-bold align-middle text-center">{{ total ~ ' ' ~ currency }}</td>
                             <td class="align-middle text-right">
-                                <a href="{{ path('app_order_place_order') }}">
+                                <form action="{{ path('app_order_place_order') }}" method="post">
                                     <button type="submit" class="btn btn-sm btn-primary custom-cart-button">
                                         Order
                                     </button>
-                                </a>
+                                </form>
                             </td>
                         </tr>
                         </tfoot>
