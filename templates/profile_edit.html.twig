@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit profile{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="justify-content-center align-items-center">
+            <div class="d-flex flex-column justify-content-center align-items-center mb-4">
+                <h1 class="text-nowrap">My profile</h1>
+            </div>
+            <div class="card card-light">
+                <div class="card-header">
+                    <h3 class="card-title">Profile information</h3>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-4">
+                            <strong>Currency:</strong>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-4">
+                            {{ form_widget(form.selectedCurrency) }}
+                            {{ form_errors(form.selectedCurrency) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{ path('app_user_profile') }}" class="btn btn-light border border-dark-subtle">Cancel</a>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

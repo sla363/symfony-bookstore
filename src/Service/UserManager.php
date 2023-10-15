@@ -71,4 +71,10 @@ class UserManager
         }
         return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $securityUser->getUserIdentifier()]);
     }
+
+    public function saveUser(User $user): void
+    {
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
 }

@@ -4,6 +4,48 @@
 
 {% block body %}
     <div class="row">
-        <h1>Welcome to the profile page!</h1>
+        <div class="justify-content-center align-items-center">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <h1 class="mb-4 text-nowrap">My profile</h1>
+            </div>
+            <div class="card card-light">
+                <div class="card-header">
+                    <h3 class="card-title">Profile information</h3>
+                </div>
+                <div class="card-body">
+                    {% set logged_in_user = user_manager.loggedInUser(app.user) %}
+                    <div class="row mb-2 text-nowrap">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-4">
+                            <strong>Email address:</strong>
+                        </div>
+                        <div class="col-xl-10 col-lg-9 col-md-8 col-sm-6 col-8">
+                            <a href="mailto:{{ logged_in_user.email }}">{{ logged_in_user.email }}</a>
+                        </div>
+                    </div>
+                    <div class="row mb-2 text-nowrap">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-4">
+                            <strong>Currency:</strong>
+                        </div>
+                        <div class="col-xl-10 col-lg-9 col-md-8 col-sm-6 col-8">
+                            {{ price_manager.currency(logged_in_user).code }}
+                        </div>
+                    </div>
+                    <div class="row mb-2 text-nowrap">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-4">
+                            <strong>Orders:</strong>
+                        </div>
+                        <div class="col-xl-10 col-lg-9 col-md-8 col-sm-6 col-8">
+                            {{ logged_in_user.orders|length }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <form action="{{ path('app_user_edit_profile') }}" method="post">
+                        <button type="submit" class="btn btn-primary">Edit profile</button>
+                        <input type="hidden" name="_method" value="PUT">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
