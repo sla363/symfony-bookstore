@@ -4,7 +4,7 @@
 {% block navbar %}{% endblock %}
 
 {% block body %}
-    <div class="container my-md-auto py-2 py-md-5 min-vh-100">
+    <div class="container my-md-auto py-2 py-md-5">
         <div class="row justify-content-center">
             <div class="col-xl-6 col-lg-6 col-md-8 col-sm-8 col-12">
                 <div class="card">
@@ -30,8 +30,12 @@
                             <button type="submit" class="btn btn-info btn-block mb-3">Submit</button>
                         </form>
                         <p>No account yet? Register now or visit the main page.</p>
-                        <a href="{{ path('app_register') }}"><button class="btn btn-primary btn-block mb-2">Register</button></a>
-                        <a href="{{ path('main_page') }}"><button class="btn btn-light btn-block">Main page</button></a>
+                        <a href="{{ path('app_register') }}">
+                            <button class="btn btn-primary btn-block mb-2">Register</button>
+                        </a>
+                        <a href="{{ path('main_page') }}">
+                            <button class="btn btn-light btn-block">Main page</button>
+                        </a>
                     </div>
                 </div>
             </div>
