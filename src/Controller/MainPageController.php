@@ -31,7 +31,7 @@ class MainPageController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/books/{id}', name: 'book_resource', methods: Request::METHOD_GET)]
+    #[Route(path: '/books/{id}', name: 'book_resource', methods: Request::METHOD_GET, priority: 1)]
     public function book(Book $book): Response
     {
         $user = null;
@@ -46,7 +46,7 @@ class MainPageController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/books/search', name: 'search_books', methods: Request::METHOD_GET)]
+    #[Route(path: '/books/search', name: 'search_books', methods: Request::METHOD_GET, priority: 2)]
     public function searchBooks(Request $request): Response
     {
         $query = $request->query->get('query');
