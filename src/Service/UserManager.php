@@ -26,11 +26,7 @@ class UserManager
         $user = new User();
 
         $user->setEmail($email);
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $password
-        );
-        $user->setPassword($hashedPassword);
+        $this->setHashedPassword($user, $password);
 
         $roleUser = $this->securityManager->getRoleByName(User::ROLE_USER);
         if (!$roleUser) {
@@ -76,5 +72,21 @@ class UserManager
     {
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+    }
+
+    public function changePassword(User $user, #[SensitiveParameter] string $password): void
+    {
+        $this->setHashedPassword($user, $password);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    public function setHashedPassword(User $user, #[SensitiveParameter] string $password): void
+    {
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $user,
+            $password
+        );
+        $user->setPassword($hashedPassword);
     }
 }

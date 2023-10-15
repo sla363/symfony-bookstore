@@ -39,9 +39,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <form action="{{ path('app_user_edit_profile') }}" method="post">
-                        <button type="submit" class="btn btn-primary">Edit profile</button>
+                <div class="card-footer d-flex">
+                    <form action="{{ path('app_user_edit_profile') }}" method="post" class="d-inline-block">
+                        <button type="submit" class="btn btn-primary mr-2">Edit profile</button>
+                        <input type="hidden" name="_method" value="PUT">
+                    </form>
+                    <form action="{{ path('app_user_change_password') }}" method="post" class="d-inline-block">
+                        <button type="submit" class="btn btn-info mr-2">Change password</button>
                         <input type="hidden" name="_method" value="PUT">
                     </form>
                 </div>
