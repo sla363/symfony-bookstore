@@ -17,6 +17,7 @@ class CartManager
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected MoneyManager           $moneyManager,
+        protected PriceManager           $priceManager,
     )
     {
     }
@@ -78,11 +79,11 @@ class CartManager
     public function getTotalSumInCart(Cart $cart): Money
     {
         $books = $this->getBooksFromCart($cart);
-        //TODO adjust the logic of retrieving the currency and calculating total amount
-        $total = new Money(0, new Currency($books->first()?->getCurrency()->getCode()));
+        $selectedCurrency = $cart->getUser()->getSelectedCurrency();
+        $total = new Money(0, new Currency($selectedCurrency->getCode()));
         foreach ($books as $book) {
             /** @var Book $book */
-            $total = $total->add($book->getPrice());
+            $total = $total->add($this->priceManager->getBookPrice($book, $cart->getUser()));
         }
 
         return $total;

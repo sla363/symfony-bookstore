@@ -8,7 +8,6 @@ use App\Entity\Transaction;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Currency;
 use Money\Money;
 
 class OrderManager
@@ -17,6 +16,7 @@ class OrderManager
         protected EntityManagerInterface $entityManager,
         protected TransactionManager     $transactionManager,
         protected MoneyManager           $moneyManager,
+        protected PriceManager           $priceManager,
     )
     {
     }
@@ -39,6 +39,7 @@ class OrderManager
         if ($cartItems->isEmpty()) {
             throw new \Exception('Cannot place an order with no items in the cart.');
         }
+        $selectedCurrency = $user->getSelectedCurrency();
 
         $order = new Order();
         $orderNumber = $this->generateOrderNumber();
@@ -49,12 +50,15 @@ class OrderManager
             $orderItem->setBook($cartItem->getBook());
             $orderItem->setOrder($order);
             $orderItem->setQuantity(1);
-            $orderItem->setItemPrice($cartItem->getBook()->getPrice());
+            $orderItem->setCurrency($selectedCurrency);
+            $selectedCurrency->addOrderItem($orderItem);
+            $orderItem->setItemPrice($this->priceManager->getBookPrice($orderItem->getBook(), $user));
             $this->entityManager->persist($orderItem);
         }
         $order->setOrderItems($orderItems);
         $user->addOrder($order);
 
+        $this->entityManager->persist($selectedCurrency);
         $this->entityManager->persist($user);
         $this->entityManager->persist($order);
         $this->entityManager->flush();
@@ -77,14 +81,12 @@ class OrderManager
     public function getTotalPriceForOrder(Order $order): Money
     {
         $orderItems = $order->getOrderItems();
-        //TODO resolve getting the right currency
-        $currencyCode = $this->entityManager->getRepository(Currency::class)->findOneBy(['code' => 'CZK']);
-        $totalPrice = new Money(0, new \Money\Currency($currencyCode->getCode()));
+        $currencyCode = $orderItems->first()->getCurrency()->getCode();
+        $totalPrice = new Money(0, new \Money\Currency($currencyCode));
 
         foreach ($orderItems as $orderItem) {
             /** @var OrderItem $orderItem */
-            //TODO resolve getting the right currency
-            $totalItemPrice = new Money(0, new \Money\Currency($currencyCode->getCode()));
+            $totalItemPrice = new Money(0, new \Money\Currency($currencyCode));
             $totalItemPrice = $totalItemPrice->add($orderItem->getItemPrice());
             $totalItemPrice = $totalItemPrice->multiply($orderItem->getQuantity());
             $totalPrice = $totalPrice->add($totalItemPrice);

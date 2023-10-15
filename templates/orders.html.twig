@@ -32,7 +32,7 @@
                                     {#                                    </a> #}
                                 </td>
                                 <td class="align-middle text-right">
-                                    {{ money_manager.formattedPrice(order_manager.totalPriceForOrder(order)) ~ ' ' ~ order.orderItems.first.book.currency.code }}
+                                    {{ money_manager.formattedPrice(order_manager.totalPriceForOrder(order)) ~ ' ' ~ order.orderItems.first.currency.code }}
                                 </td>
                             </tr>
                         {% endfor %}

@@ -40,6 +40,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
     private Collection $orders;
 
+    #[ORM\ManyToOne(targetEntity: Currency::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Currency $selectedCurrency;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
@@ -159,6 +163,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $order->setUser($this);
         }
 
+        return $this;
+    }
+
+    public function getSelectedCurrency(): Currency
+    {
+        return $this->selectedCurrency;
+    }
+
+    public function setSelectedCurrency(Currency $selectedCurrency): static
+    {
+        $this->selectedCurrency = $selectedCurrency;
         return $this;
     }
 

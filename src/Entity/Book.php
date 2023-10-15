@@ -33,13 +33,6 @@ class Book
     #[ORM\Column(type: Types::TEXT)]
     private string $description;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    private string $price;
-
-    #[ORM\ManyToOne(targetEntity: Currency::class, inversedBy: 'books')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Currency $currency;
-
     #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'books')]
     #[ORM\JoinColumn(nullable: false)]
     private Author $author;
@@ -54,10 +47,14 @@ class Book
     #[ORM\OneToMany(mappedBy: 'book', targetEntity: CartItem::class)]
     private Collection $cartItems;
 
+    #[ORM\OneToMany(mappedBy: 'book', targetEntity: Price::class)]
+    private Collection $prices;
+
     public function __construct()
     {
         $this->orderItems = new ArrayCollection();
         $this->cartItems = new ArrayCollection();
+        $this->prices = new ArrayCollection();
     }
 
 
@@ -114,14 +111,14 @@ class Book
         return $this;
     }
 
-    public function getPrice(): Money
+    public function getPrices(): Collection
     {
-        return new Money($this->price, new \Money\Currency($this->getCurrency()->getCode()));
+        return $this->prices;
     }
 
-    public function setPrice(Money $price): static
+    public function setPrices(Collection $prices): static
     {
-        $this->price = $price->getAmount();
+        $this->prices = $prices;
         return $this;
     }
 
@@ -146,17 +143,6 @@ class Book
     {
         $this->genre = $genre;
 
-        return $this;
-    }
-
-    public function getCurrency(): Currency
-    {
-        return $this->currency;
-    }
-
-    public function setCurrency(Currency $currency): static
-    {
-        $this->currency = $currency;
         return $this;
     }
 
@@ -208,6 +194,22 @@ class Book
             $cartItems->add($cartItem);
             $this->setCartItems($cartItems);
             $cartItem->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function addPrice(Price $price): static
+    {
+        try {
+            $prices = $this->getPrices();
+        } catch (\Error $e) {
+            $prices = new ArrayCollection();
+        }
+        if ($prices->isEmpty() || !$prices->contains($price)) {
+            $prices->add($price);
+            $this->setPrices($prices);
+            $price->setBook($this);
         }
 
         return $this;

@@ -26,6 +26,10 @@ class OrderItem
     #[ORM\JoinColumn(nullable: false)]
     private Book $book;
 
+    #[ORM\ManyToOne(targetEntity: Currency::class, inversedBy: 'orderItems')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Currency $currency;
+
     #[ORM\Column(type: Types::STRING)]
     private string $itemPrice;
 
@@ -61,8 +65,7 @@ class OrderItem
 
     public function getItemPrice(): Money
     {
-        //TODO fix currency retrieval
-        return new Money($this->itemPrice, new \Money\Currency('CZK'));
+        return new Money($this->itemPrice, new \Money\Currency($this->getCurrency()->getCode()));
     }
 
     public function setItemPrice(Money $itemPrice): static
@@ -79,6 +82,17 @@ class OrderItem
     public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
+        return $this;
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(Currency $currency): static
+    {
+        $this->currency = $currency;
         return $this;
     }
 }

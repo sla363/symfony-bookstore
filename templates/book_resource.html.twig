@@ -18,7 +18,13 @@
                     </p>
                     <p class="card-text mb-1"><strong>Genre:</strong> {{ book.genre.name }}</p>
                     <p class="card-text">
-                        <strong>Price:</strong> {{ money_manager.formattedPrice(book.price) ~ ' ' ~ book.currency.code }}
+                        <strong>Price:</strong>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            {% set logged_in_user = user_manager.loggedInUser(app.user) %}
+                            {{ money_manager.formattedPrice(price_manager.bookPrice(book, logged_in_user)) ~ ' ' ~ price_manager.currency(logged_in_user).code }}
+                        {% else %}
+                            {{ money_manager.formattedPrice(price_manager.bookPrice(book, null)) ~ ' ' ~ price_manager.defaultCurrency.code }}
+                        {% endif %}
                     </p>
                     <p class="card-text">{{ book.description }}</p>
                 </div>
@@ -35,7 +41,9 @@
                     {% if cartItem is defined and cartItem is not null %}
                         <div class="col-auto">
                             <form action="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}" method="post">
-                                <button type="submit" class="btn btn-danger" {% if not app.user %}disabled{% endif %}>Remove from cart</button>
+                                <button type="submit" class="btn btn-danger" {% if not app.user %}disabled{% endif %}>
+                                    Remove from cart
+                                </button>
                                 <input type="hidden" name="_method" value="DELETE">
                             </form>
                         </div>

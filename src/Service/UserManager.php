@@ -16,6 +16,7 @@ class UserManager
         protected SecurityManager             $securityManager,
         protected UserPasswordHasherInterface $passwordHasher,
         protected EntityManagerInterface      $entityManager,
+        protected PriceManager                $priceManager,
     )
     {
     }
@@ -36,17 +37,23 @@ class UserManager
             throw new \Exception('User role does not exist, cannot create user.');
         }
 
-
-        $this->entityManager->persist($roleUser);
-        $this->entityManager->persist($user);
         $roleUser->addUser($user);
         $user->addRole($roleUser);
+
+        $selectedCurrency = $this->priceManager->getDefaultCurrency();
+        $user->setSelectedCurrency($selectedCurrency);
+        $selectedCurrency->addUser($user);
+
+        $this->entityManager->persist($user);
+        $this->entityManager->persist($roleUser);
+        $this->entityManager->persist($selectedCurrency);
         $this->entityManager->flush();
 
         $cart = new Cart();
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
         $user->setCart($cart);
         $cart->setUser($user);
+
         $this->entityManager->persist($cart);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -57,7 +64,8 @@ class UserManager
     /**
      * @throws \Exception
      */
-    public function getLoggedInUser(?UserInterface $securityUser): ?User {
+    public function getLoggedInUser(?UserInterface $securityUser): ?User
+    {
         if (!$securityUser) {
             throw new \Exception('User is not logged in.');
         }

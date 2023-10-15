@@ -28,10 +28,13 @@
                                         {{ cartItem.book.title|length < 20 ? cartItem.book.title : cartItem.book.title|slice(0, 19)~'...' }}
                                     </a>
                                 </td>
-                                <td class="align-middle text-center">{{ money_manager.formattedPrice(cartItem.book.price) ~ ' ' ~ cartItem.book.price.currency }}</td>
+                                {% set logged_in_user = user_manager.loggedInUser(app.user) %}
+                                <td class="align-middle text-center">{{ money_manager.formattedPrice(price_manager.bookPrice(cartItem.book, logged_in_user)) ~ ' ' ~ price_manager.currency(logged_in_user).code }}</td>
                                 <td class="align-middle text-right">
-                                    <form action="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}" method="post">
-                                        <button type="submit" class="btn btn-sm btn-danger custom-cart-button" {% if not app.user %}disabled{% endif %}>
+                                    <form action="{{ path('app_cart_remove', {'book': cartItem.book.id}) }}"
+                                          method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger custom-cart-button"
+                                                {% if not app.user %}disabled{% endif %}>
                                             Remove
                                         </button>
                                         <input type="hidden" name="_method" value="DELETE">

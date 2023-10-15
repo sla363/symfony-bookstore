@@ -29,7 +29,14 @@
                             <div class="flex-grow-1 d-flex flex-column justify-content-end align-items-center">
                                 <!-- This div will grow to take available space -->
                                 <p class="card-text text-sm mb-2 text-center">{{ book.author.fullName }}</p>
-                                <p class="card-text text-sm text-center text-bold">{{ money_manager.formattedPrice(book.price) ~ ' ' ~ book.currency.code }}</p>
+                                <p class="card-text text-sm text-center text-bold">
+                                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                        {% set logged_in_user = user_manager.loggedInUser(app.user) %}
+                                        {{ money_manager.formattedPrice(price_manager.bookPrice(book, logged_in_user)) ~ ' ' ~ price_manager.currency(logged_in_user).code }}
+                                    {% else %}
+                                        {{ money_manager.formattedPrice(price_manager.bookPrice(book, null)) ~ ' ' ~ price_manager.defaultCurrency.code }}
+                                    {% endif %}
+                                </p>
                                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                                     <form action="{{ path('app_cart_add', {'book': book.id}) }}" method="post">
                                         <button type="submit" class="btn-primary btn">Add to cart</button>

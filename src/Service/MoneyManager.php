@@ -8,7 +8,7 @@ use Money\Money;
 
 class MoneyManager
 {
-    public function getFormattedPrice(Money $price): string
+    public function getFormattedPrice(Money $price): float
     {
         $isoCurrencies = new ISOCurrencies();
         $moneyFormatter = new DecimalMoneyFormatter($isoCurrencies);

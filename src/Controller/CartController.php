@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\CartManager;
 use App\Entity\Book;
 use App\Service\OrderManager;
+use App\Service\PriceManager;
 use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,7 @@ class CartController extends AbstractController
         protected EntityManagerInterface $entityManager,
         protected UserManager            $userManager,
         protected OrderManager           $orderManager,
+        protected PriceManager           $priceManager,
     )
     {
     }
@@ -62,7 +64,8 @@ class CartController extends AbstractController
     }
 
     #[Route(path: '/cart', name: 'app_cart_clear_cart', methods: Request::METHOD_DELETE)]
-    public function clearCart(): Response {
+    public function clearCart(): Response
+    {
         try {
             $user = $this->userManager->getLoggedInUser($this->getUser());
         } catch (\Exception $e) {
@@ -85,11 +88,10 @@ class CartController extends AbstractController
             return $this->redirectToRoute('main_page');
         }
         if ($user) {
-            //TODO adjust currency retrieval logic
             return $this->render('cart.html.twig', [
                 'cart' => $user->getCart(),
                 'total' => $user->getCart()->getCartItems()->isEmpty() ? 0 : $this->cartManager->getTotalSumInCartDisplayPrice($user->getCart()),
-                'currency' => $user->getCart()->getCartItems()->isEmpty() ? '' : $this->cartManager->getBooksFromCart($user->getCart())->first()?->getCurrency()->getCode()
+                'currency' => $this->priceManager->getCurrency($user)->getCode()
             ]);
         }
         return $this->redirectToRoute('main_page');

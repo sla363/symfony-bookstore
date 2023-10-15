@@ -2,6 +2,8 @@ twig:
   default_path: '%kernel.project_dir%/templates'
   globals:
     money_manager: '@App\Service\MoneyManager'
+    price_manager: '@App\Service\PriceManager'
+    user_manager: '@App\Service\UserManager'
 
 when@test:
   twig:
