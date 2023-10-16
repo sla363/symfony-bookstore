@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
@@ -46,8 +48,11 @@ class ChangePasswordType extends AbstractType
                     new NotBlank(),
                     new Length(min: 8),
                     new Callback(function (mixed $value, ExecutionContextInterface $context) {
-                        $password = $context->getRoot()->getData()->getPassword();
-                        if ($password !== $value) {
+                        /** @var FormInterface $form */
+                        $form = $context->getRoot();
+                        /** @var User $user $password */
+                        $user = $form->getData();
+                        if ($user->getPassword() !== $value) {
                             $context->addViolation('The passwords do not match.');
                         }
                     })

@@ -29,6 +29,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::STRING)]
     private string $password;
 
+    /**
+     * @var Collection<int, Role> $userRoles
+     */
     #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'users')]
     #[ORM\JoinTable(name: 'app_user_role')]
     private Collection $userRoles;
@@ -37,6 +40,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: true)]
     private ?Cart $cart;
 
+    /**
+     * @var Collection<int, Order> $orders
+     */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
     private Collection $orders;
 
@@ -77,11 +83,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Role>
+     */
     public function getUserRoles(): Collection
     {
         return $this->userRoles;
     }
 
+    /**
+     * @param Collection<int, Role> $userRoles
+     */
     public function setUserRoles(Collection $userRoles): static
     {
         $this->userRoles = $userRoles;
@@ -92,7 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         try {
             $userRoles = $this->userRoles;
-        } catch (\Error) {
+        } catch (\Error $error) {
             $userRoles = new ArrayCollection();
         }
         if ($userRoles->isEmpty() || !$userRoles->contains($userRole)) {
@@ -108,11 +120,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         try {
             $userRoles = $this->userRoles;
-        } catch (\Error) {
+        } catch (\Error $error) {
             $userRoles = new ArrayCollection();
         }
         if (!$userRoles->isEmpty() && $userRoles->contains($userRole)) {
-            $userRoles->remove($userRole);
+            $userRoles->remove($userRole->getId());
             $userRole->removeUser($this);
             $this->setUserRoles($userRoles);
         }
@@ -139,11 +151,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Order>
+     */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
 
+    /**
+     * @param Collection<int, Order> $orders
+     */
     public function setOrders(Collection $orders): static
     {
         $this->orders = $orders;
