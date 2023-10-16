@@ -38,7 +38,7 @@ class CartController extends AbstractController
             $this->cartManager->addItemToCart($user, $book);
         }
 
-        if ($request->get('redirect_to_route')) {
+        if ($request->get('redirect_to_route') && is_string($request->get('redirect_to_route'))) {
             return $this->redirectToRoute($request->get('redirect_to_route'), ['id' => $book->getId()]);
         }
         return $this->redirectToRoute('main_page');
@@ -57,7 +57,7 @@ class CartController extends AbstractController
             $this->cartManager->removeItemFromCart($user, $book);
         }
 
-        if ($request->get('redirect_to_route')) {
+        if ($request->get('redirect_to_route') && is_string($request->get('redirect_to_route'))) {
             return $this->redirectToRoute($request->get('redirect_to_route'), ['id' => $book->getId()]);
         }
         return $this->redirectToRoute('app_cart_cart');
@@ -87,7 +87,7 @@ class CartController extends AbstractController
             $this->addFlash('notice', 'You must be logged in to perform this action');
             return $this->redirectToRoute('main_page');
         }
-        if ($user) {
+        if ($user && $user->getCart()) {
             return $this->render('cart.html.twig', [
                 'cart' => $user->getCart(),
                 'total' => $user->getCart()->getCartItems()->isEmpty() ? 0 : $this->cartManager->getTotalSumInCartDisplayPrice($user->getCart()),

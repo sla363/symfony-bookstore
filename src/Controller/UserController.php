@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\ChangePasswordDTO;
+use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\UserProfileType;
 use App\Service\UserManager;
@@ -39,6 +40,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            /** @var User $data */
             $this->userManager->saveUser($data);
             return $this->redirectToRoute('app_user_profile');
         }
@@ -60,8 +62,12 @@ class UserController extends AbstractController
         $changePasswordDTO = new ChangePasswordDTO();
         $form = $this->createForm(ChangePasswordType::class, $changePasswordDTO);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->userManager->changePassword($user, $form->getData()->getPassword());
+        if ($form->isSubmitted() && $form->isValid() && $user) {
+            /** @var ChangePasswordDTO $dtoData */
+            $dtoData = $form->getData();
+            /** @var string $dtoPassword */
+            $dtoPassword = $dtoData->getPassword();
+            $this->userManager->changePassword($user, $dtoPassword);
             return $this->redirectToRoute('app_user_profile');
         }
 

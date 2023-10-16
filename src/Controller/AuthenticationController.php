@@ -50,6 +50,7 @@ class AuthenticationController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $formData = $form->getData();
+            /** @var string[] $formData */
             $email = $formData['email'];
             $password = $formData['password'];
             $confirmPassword = $formData['confirm_password'];

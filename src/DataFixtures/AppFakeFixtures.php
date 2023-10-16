@@ -69,8 +69,12 @@ class AppFakeFixtures extends Fixture
 
         for ($i = 0; $i < 100; $i++) {
             $book = new Book();
-            $book->setAuthor($faker->randomElement($authors));
-            $book->setGenre($faker->randomElement($genres));
+            /** @var Author $randomAuthor */
+            $randomAuthor = $faker->randomElement($authors);
+            $book->setAuthor($randomAuthor);
+            /** @var Genre $randomGenre */
+            $randomGenre = $faker->randomElement($genres);
+            $book->setGenre($randomGenre);
             $book->setTitle($faker->sentence(3));
             $book->setDescription($faker->paragraph(5));
             $book->addPrice($pricesInCzk[$i]);
