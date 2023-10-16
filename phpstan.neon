@@ -1,0 +1,17 @@
+parameters:
+    level: 9
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/
+    scanDirectories:
+        - vendor/jetbrains/phpstorm-stubs
+    doctrine:
+        objectManagerLoader: tests/phpstan/object-manager.php
+    symfony:
+        consoleApplicationLoader: tests/phpstan/console-application-loader.php
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
