@@ -22,12 +22,21 @@ class Currency
     #[ORM\Column(type: Types::STRING, length: 3)]
     private string $code;
 
+    /**
+     * @var Collection<int, User> $users
+     */
     #[ORM\OneToMany(mappedBy: 'selectedCurrency', targetEntity: User::class)]
     private Collection $users;
 
+    /**
+     * @var Collection<int, Price> $prices
+     */
     #[ORM\OneToMany(mappedBy: 'currency', targetEntity: Price::class)]
     private Collection $prices;
 
+    /**
+     * @var Collection<int, OrderItem> $orderItems
+     */
     #[ORM\OneToMany(mappedBy: 'currency', targetEntity: OrderItem::class)]
     private Collection $orderItems;
 
@@ -55,11 +64,17 @@ class Currency
         return $this->id;
     }
 
+    /**
+     * @return Collection<int, Price>
+     */
     public function getPrices(): Collection
     {
         return $this->prices;
     }
 
+    /**
+     * @param Collection<int, Price> $prices
+     */
     public function setPrices(Collection $prices): static
     {
         $this->prices = $prices;
@@ -82,11 +97,17 @@ class Currency
         return $this;
     }
 
+    /**
+     * @return Collection<int, User>
+     */
     public function getUsers(): Collection
     {
         return $this->users;
     }
 
+    /**
+     * @param Collection<int, User> $users
+     */
     public function setUsers(Collection $users): static
     {
         $this->users = $users;
@@ -109,11 +130,17 @@ class Currency
         return $this;
     }
 
+    /**
+     * @return Collection<int, OrderItem>
+     */
     public function getOrderItems(): Collection
     {
         return $this->orderItems;
     }
 
+    /**
+     * @param Collection<int, OrderItem> $orderItems
+     */
     public function setOrderItems(Collection $orderItems): static
     {
         $this->orderItems = $orderItems;

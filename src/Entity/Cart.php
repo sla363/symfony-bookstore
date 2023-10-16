@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Cart
 {
     use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -21,6 +22,9 @@ class Cart
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
+    /**
+     * @var Collection<int, CartItem> $cartItems
+     */
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class)]
     private Collection $cartItems;
 
@@ -46,11 +50,17 @@ class Cart
         return $this;
     }
 
+    /**
+     * @return Collection<int, CartItem>
+     */
     public function getCartItems(): Collection
     {
         return $this->cartItems;
     }
 
+    /**
+     * @param Collection<int, CartItem> $cartItems
+     */
     public function setCartItems(Collection $cartItems): static
     {
         $this->cartItems = $cartItems;

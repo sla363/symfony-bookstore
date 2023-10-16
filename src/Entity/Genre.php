@@ -21,6 +21,9 @@ class Genre
     #[ORM\Column(length: 255)]
     private string $name;
 
+    /**
+     * @var Collection<int, Book> $books
+     */
     #[ORM\OneToMany(mappedBy: 'genre', targetEntity: Book::class)]
     private Collection $books;
 
@@ -54,6 +57,9 @@ class Genre
         return $this->books;
     }
 
+    /**
+     * @param Collection<int, Book> $books
+     */
     public function setBooks(Collection $books): static
     {
         $this->books = $books;

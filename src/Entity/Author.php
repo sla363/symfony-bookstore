@@ -24,6 +24,9 @@ class Author
     #[ORM\Column(length: 255)]
     private string $lastName;
 
+    /**
+     * @var Collection<int, Book>
+     */
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Book::class)]
     private Collection $books;
 
@@ -74,6 +77,9 @@ class Author
         return $this->books;
     }
 
+    /**
+     * @param Collection<int, Book> $books
+     */
     public function setBooks(Collection $books): static
     {
         $this->books = $books;

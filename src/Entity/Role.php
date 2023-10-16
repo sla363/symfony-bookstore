@@ -22,6 +22,9 @@ class Role
     #[ORM\Column(type: Types::STRING)]
     private string $name;
 
+    /**
+     * @var Collection<int, User> $users
+     */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'userRoles')]
     private Collection $users;
 
@@ -41,11 +44,17 @@ class Role
         return $this;
     }
 
+    /**
+     * @return Collection<int, User>
+     */
     public function getUsers(): Collection
     {
         return $this->users;
     }
 
+    /**
+     * @param Collection<int, User> $users
+     */
     public function setUsers(Collection $users): static
     {
         $this->users = $users;

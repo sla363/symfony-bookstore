@@ -27,6 +27,9 @@ class Order
     #[ORM\JoinColumn(nullable: true)]
     private ?Transaction $transaction;
 
+    /**
+     * @var Collection<int, OrderItem> $orderItems
+     */
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class)]
     private Collection $orderItems;
 
@@ -56,11 +59,17 @@ class Order
         return $this;
     }
 
+    /**
+     * @return Collection<int, OrderItem>
+     */
     public function getOrderItems(): Collection
     {
         return $this->orderItems;
     }
 
+    /**
+     * @param Collection<int, OrderItem> $orderItems
+     */
     public function setOrderItems(Collection $orderItems): static
     {
         $this->orderItems = $orderItems;

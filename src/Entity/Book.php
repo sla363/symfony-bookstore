@@ -41,12 +41,21 @@ class Book
     #[ORM\JoinColumn(nullable: false)]
     private Genre $genre;
 
+    /**
+     * @var Collection<int, OrderItem> $orderItems
+     */
     #[ORM\OneToMany(mappedBy: 'book', targetEntity: OrderItem::class)]
     private Collection $orderItems;
 
+    /**
+     * @var Collection<int, CartItem> $cartItems
+     */
     #[ORM\OneToMany(mappedBy: 'book', targetEntity: CartItem::class)]
     private Collection $cartItems;
 
+    /**
+     * @var Collection<int, Price> $prices
+     */
     #[ORM\OneToMany(mappedBy: 'book', targetEntity: Price::class)]
     private Collection $prices;
 
@@ -111,11 +120,17 @@ class Book
         return $this;
     }
 
+    /**
+     * @return Collection<int, Price>
+     */
     public function getPrices(): Collection
     {
         return $this->prices;
     }
 
+    /**
+     * @param Collection<int, Price> $prices
+     */
     public function setPrices(Collection $prices): static
     {
         $this->prices = $prices;
@@ -146,11 +161,17 @@ class Book
         return $this;
     }
 
+    /**
+     * @return Collection<int, OrderItem>
+     */
     public function getOrderItems(): Collection
     {
         return $this->orderItems;
     }
 
+    /**
+     * @param Collection<int, OrderItem> $orderItems
+     */
     public function setOrderItems(Collection $orderItems): static
     {
         $this->orderItems = $orderItems;
@@ -172,11 +193,17 @@ class Book
         return $this;
     }
 
+    /**
+     * @return Collection<int, CartItem>
+     */
     public function getCartItems(): Collection
     {
         return $this->cartItems;
     }
 
+    /**
+     * @param Collection<int, CartItem> $cartItems
+     */
     public function setCartItems(Collection $cartItems): static
     {
         $this->cartItems = $cartItems;
