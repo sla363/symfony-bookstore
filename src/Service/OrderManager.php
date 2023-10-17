@@ -24,7 +24,7 @@ class OrderManager
     public function generateOrderNumber(): string
     {
         do {
-            $generatedOrderNumber = 'ON' . str_pad(rand(1, 99999999), 8, '0', STR_PAD_LEFT);
+            $generatedOrderNumber = 'ON' . str_pad((string)rand(1, 99999999), 8, '0', STR_PAD_LEFT);
             $existingOrder = $this->entityManager->getRepository(Order::class)->findOneBy(['orderNumber' => $generatedOrderNumber]);
         } while ($existingOrder);
         return $generatedOrderNumber;
@@ -35,7 +35,11 @@ class OrderManager
      */
     public function placeOrder(User $user): void
     {
-        $cartItems = $user->getCart()->getCartItems();
+        $cart = $user->getCart();
+        if (!$cart) {
+            throw new \Exception('Cannot place an order with no cart.');
+        }
+        $cartItems = $cart->getCartItems();
         if ($cartItems->isEmpty()) {
             throw new \Exception('Cannot place an order with no items in the cart.');
         }

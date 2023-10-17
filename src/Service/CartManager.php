@@ -100,7 +100,7 @@ class CartManager
             /** @var Book $book */
             $bookPrice = $this->priceManager->getBookPrice($book, $cart->getUser());
             if ($bookPrice) {
-                $total = $total->add();
+                $total = $total->add($bookPrice);
             }
         }
 

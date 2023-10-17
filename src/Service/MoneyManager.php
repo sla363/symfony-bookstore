@@ -12,6 +12,6 @@ class MoneyManager
     {
         $isoCurrencies = new ISOCurrencies();
         $moneyFormatter = new DecimalMoneyFormatter($isoCurrencies);
-        return $moneyFormatter->format($price);
+        return (float)$moneyFormatter->format($price);
     }
 }

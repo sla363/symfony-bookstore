@@ -4,7 +4,10 @@ namespace App\Service;
 
 class DateManager
 {
-    public function createDateFromMultipleFormats($value, $hour = 0, $minute = 0, $second = 0, array $formats = null): ?\DateTime
+    /**
+     * @param array<string> $formats
+     */
+    public function createDateFromMultipleFormats(string $value, int $hour = 0, int $minute = 0, int $second = 0, array $formats = null): ?\DateTime
     {
         if (!$formats) {
             $formats = [
