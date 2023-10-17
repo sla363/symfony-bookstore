@@ -26,11 +26,12 @@ class PriceManager
         }
         $bookPrices = $book->getPrices();
 
-
-        foreach ($bookPrices as $bookPrice) {
-            /** @var Price $bookPrice */
-            if ($bookPrice->getCurrency()->getCode() === $selectedCurrency->getCode()) {
-                return $bookPrice->getAmount();
+        if ($selectedCurrency) {
+            foreach ($bookPrices as $bookPrice) {
+                /** @var Price $bookPrice */
+                if ($bookPrice->getCurrency()->getCode() === $selectedCurrency->getCode()) {
+                    return $bookPrice->getAmount();
+                }
             }
         }
 
@@ -48,6 +49,13 @@ class PriceManager
 
     public function getDefaultCurrency(): Currency
     {
-        return $this->entityManager->getRepository(Currency::class)->findOneBy(['code' => 'CZK']);
+        $defaultCurrency = $this->entityManager->getRepository(Currency::class)->findOneBy(['code' => 'CZK']);
+        if (!$defaultCurrency) {
+            $defaultCurrency = (new Currency())
+                ->setCode('CZK');
+            $this->entityManager->persist($defaultCurrency);
+            $this->entityManager->flush();
+        }
+        return $defaultCurrency;
     }
 }

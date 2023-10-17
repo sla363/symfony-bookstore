@@ -56,8 +56,11 @@ class OrderManager
             $orderItem->setQuantity(1);
             $orderItem->setCurrency($selectedCurrency);
             $selectedCurrency->addOrderItem($orderItem);
-            $orderItem->setItemPrice($this->priceManager->getBookPrice($orderItem->getBook(), $user));
-            $this->entityManager->persist($orderItem);
+            $bookPrice = $this->priceManager->getBookPrice($orderItem->getBook(), $user);
+            if ($bookPrice) {
+                $orderItem->setItemPrice($bookPrice);
+                $this->entityManager->persist($orderItem);
+            }
         }
         $order->setOrderItems($orderItems);
         $user->addOrder($order);
@@ -69,7 +72,6 @@ class OrderManager
 
         $transaction = new Transaction();
         $transaction->setIdentifier($this->transactionManager->generateTransactionIdentifier());
-        $order = $this->entityManager->getRepository(Order::class)->findOneBy(['orderNumber' => $orderNumber]);
         $transaction->setOrder($order);
         $order->setTransaction($transaction);
 
@@ -77,15 +79,26 @@ class OrderManager
         $this->entityManager->flush();
     }
 
+    /**
+     * @return array<int, Order>
+     */
     public function getOrdersForUser(User $user): array
     {
         return $this->entityManager->getRepository(Order::class)->findBy(['user' => $user]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getTotalPriceForOrder(Order $order): Money
     {
         $orderItems = $order->getOrderItems();
-        $currencyCode = $orderItems->first()->getCurrency()->getCode();
+        $firstOrderItem = $orderItems->first();
+        if ($firstOrderItem) {
+            $currencyCode = $firstOrderItem->getCurrency()->getCode();
+        } else {
+            throw new \Exception('Cannot determine currency for this order.');
+        }
         $totalPrice = new Money(0, new \Money\Currency($currencyCode));
 
         foreach ($orderItems as $orderItem) {

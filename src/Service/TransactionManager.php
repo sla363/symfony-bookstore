@@ -16,7 +16,7 @@ class TransactionManager
     public function generateTransactionIdentifier(): string
     {
         do {
-            $generatedTransactionIdentifier = 'TR' . str_pad(rand(1, 99999999), 8, '0', STR_PAD_LEFT);
+            $generatedTransactionIdentifier = 'TR' . str_pad((string)rand(1, 99999999), 8, '0', STR_PAD_LEFT);
             $existingTransaction = $this->entityManager->getRepository(Transaction::class)->findOneBy(['identifier' => $generatedTransactionIdentifier]);
         } while ($existingTransaction);
         return $generatedTransactionIdentifier;

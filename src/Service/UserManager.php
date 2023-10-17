@@ -21,7 +21,7 @@ class UserManager
     {
     }
 
-    public function createUser(string $email, #[SensitiveParameter] $password): User
+    public function createUser(string $email, #[SensitiveParameter] string $password): User
     {
         $user = new User();
 
@@ -46,7 +46,6 @@ class UserManager
         $this->entityManager->flush();
 
         $cart = new Cart();
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
         $user->setCart($cart);
         $cart->setUser($user);
 

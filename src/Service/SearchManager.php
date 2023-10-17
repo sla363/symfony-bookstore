@@ -14,11 +14,17 @@ class SearchManager
     {
     }
 
+    /**
+     * @return array<int, Book>
+     */
     public function searchBooks(string $text): array
     {
         return $this->entityManager->getRepository(Book::class)->searchBooks($text);
     }
 
+    /**
+     * @return array<int, Book>
+     */
     public function getAllBooks(): array
     {
         return $this->entityManager->getRepository(Book::class)->findAll();
