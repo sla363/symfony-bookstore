@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Service;
 
 use App\Entity\Role;
 use Doctrine\ORM\EntityManagerInterface;

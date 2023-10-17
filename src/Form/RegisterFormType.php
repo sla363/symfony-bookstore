@@ -28,7 +28,7 @@ class RegisterFormType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Email()
-                ]
+                ],
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Password',
@@ -43,7 +43,7 @@ class RegisterFormType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Length(min: 8),
-                ]
+                ],
             ])
             ->add('confirm_password', PasswordType::class, [
                 'label' => 'Confirm password',
@@ -55,10 +55,6 @@ class RegisterFormType extends AbstractType
                     'required' => 'required',
                     'autofocus' => 'autofocus',
                 ],
-//                'constraints' => [
-//                    new NotBlank(),
-//                    new Length(min: 8),
-//                ]
             ]);
     }
 

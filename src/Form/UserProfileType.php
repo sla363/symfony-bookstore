@@ -25,7 +25,7 @@ class UserProfileType extends AbstractType
                 'choice_label' => 'code',
                 'attr' => [
                     'class' => 'form-control'
-                ]
+                ],
             ]);
     }
 }

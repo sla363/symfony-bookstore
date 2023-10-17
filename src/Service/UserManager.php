@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Controller\SecurityManager;
 use App\Entity\Cart;
 use App\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
