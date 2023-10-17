@@ -125,7 +125,7 @@ class Book
      */
     public function getPrices(): Collection
     {
-        return $this->prices;
+        return $this->prices ?? new ArrayCollection();
     }
 
     /**
@@ -166,7 +166,7 @@ class Book
      */
     public function getOrderItems(): Collection
     {
-        return $this->orderItems;
+        return $this->orderItems ?? new ArrayCollection();
     }
 
     /**
@@ -180,11 +180,7 @@ class Book
 
     public function addOrderItem(OrderItem $orderItem): static
     {
-        try {
-            $orderItems = $this->getOrderItems();
-        } catch (\Error $e) {
-            $orderItems = new ArrayCollection();
-        }
+        $orderItems = $this->getOrderItems();
         if ($orderItems->isEmpty() || !$orderItems->contains($orderItem)) {
             $orderItems->add($orderItem);
             $this->setOrderItems($orderItems);
@@ -212,11 +208,7 @@ class Book
 
     public function addCartItem(CartItem $cartItem): static
     {
-        try {
-            $cartItems = $this->getCartItems();
-        } catch (\Error $e) {
-            $cartItems = new ArrayCollection();
-        }
+        $cartItems = $this->getCartItems();
         if ($cartItems->isEmpty() || !$cartItems->contains($cartItem)) {
             $cartItems->add($cartItem);
             $this->setCartItems($cartItems);
@@ -228,11 +220,7 @@ class Book
 
     public function addPrice(Price $price): static
     {
-        try {
-            $prices = $this->getPrices();
-        } catch (\Error $e) {
-            $prices = new ArrayCollection();
-        }
+        $prices = $this->getPrices();
         if ($prices->isEmpty() || !$prices->contains($price)) {
             $prices->add($price);
             $this->setPrices($prices);

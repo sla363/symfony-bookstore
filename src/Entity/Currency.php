@@ -69,7 +69,7 @@ class Currency
      */
     public function getPrices(): Collection
     {
-        return $this->prices;
+        return $this->prices ?? new ArrayCollection();
     }
 
     /**
@@ -83,11 +83,7 @@ class Currency
 
     public function addPrice(Price $price): static
     {
-        try {
-            $prices = $this->getPrices();
-        } catch (\Error $e) {
-            $prices = new ArrayCollection();
-        }
+        $prices = $this->getPrices();
         if ($prices->isEmpty() || !$prices->contains($price)) {
             $prices->add($price);
             $this->setPrices($prices);
@@ -102,7 +98,7 @@ class Currency
      */
     public function getUsers(): Collection
     {
-        return $this->users;
+        return $this->users ?? new ArrayCollection();
     }
 
     /**
@@ -116,11 +112,7 @@ class Currency
 
     public function addUser(User $user): static
     {
-        try {
-            $users = $this->getUsers();
-        } catch (\Error $e) {
-            $users = new ArrayCollection();
-        }
+        $users = $this->getUsers();
         if ($users->isEmpty() || !$users->contains($user)) {
             $users->add($user);
             $this->setUsers($users);
@@ -135,7 +127,7 @@ class Currency
      */
     public function getOrderItems(): Collection
     {
-        return $this->orderItems;
+        return $this->orderItems ?? new ArrayCollection();
     }
 
     /**
@@ -149,11 +141,7 @@ class Currency
 
     public function addOrderItem(OrderItem $orderItem): static
     {
-        try {
-            $orderItems = $this->getOrderItems();
-        } catch (\Error $e) {
-            $orderItems = new ArrayCollection();
-        }
+        $orderItems = $this->getOrderItems();
         if ($orderItems->isEmpty() || !$orderItems->contains($orderItem)) {
             $orderItems->add($orderItem);
             $this->setOrderItems($orderItems);

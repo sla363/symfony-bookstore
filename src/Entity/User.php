@@ -88,7 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserRoles(): Collection
     {
-        return $this->userRoles;
+        return $this->userRoles ?? new ArrayCollection();
     }
 
     /**
@@ -102,11 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addRole(Role $userRole): static
     {
-        try {
-            $userRoles = $this->userRoles;
-        } catch (\Error $error) {
-            $userRoles = new ArrayCollection();
-        }
+        $userRoles = $this->userRoles;
         if ($userRoles->isEmpty() || !$userRoles->contains($userRole)) {
             $userRoles->add($userRole);
             $userRole->addUser($this);
@@ -118,11 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRole(Role $userRole): static
     {
-        try {
-            $userRoles = $this->userRoles;
-        } catch (\Error $error) {
-            $userRoles = new ArrayCollection();
-        }
+        $userRoles = $this->userRoles;
         if (!$userRoles->isEmpty() && $userRoles->contains($userRole)) {
             $userRoles->remove($userRole->getId());
             $userRole->removeUser($this);
@@ -156,7 +148,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getOrders(): Collection
     {
-        return $this->orders;
+        return $this->orders ?? new ArrayCollection();
     }
 
     /**
@@ -170,11 +162,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addOrder(Order $order): static
     {
-        try {
-            $orders = $this->getOrders();
-        } catch (\Error $error) {
-            $orders = new ArrayCollection();
-        }
+        $orders = $this->getOrders();
         if ($orders->isEmpty() || !$orders->contains($order)) {
             $orders->add($order);
             $this->setOrders($orders);

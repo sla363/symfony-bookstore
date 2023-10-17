@@ -64,7 +64,7 @@ class Order
      */
     public function getOrderItems(): Collection
     {
-        return $this->orderItems;
+        return $this->orderItems ?? new ArrayCollection();
     }
 
     /**
@@ -78,11 +78,7 @@ class Order
 
     public function addOrderItem(OrderItem $orderItem): static
     {
-        try {
-            $orderItems = $this->getOrderItems();
-        } catch (\Error $e) {
-            $orderItems = new ArrayCollection();
-        }
+        $orderItems = $this->getOrderItems();
         if ($orderItems->isEmpty() || !$orderItems->contains($orderItem)) {
             $orderItems->add($orderItem);
             $this->setOrderItems($orderItems);

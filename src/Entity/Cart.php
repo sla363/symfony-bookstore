@@ -55,7 +55,7 @@ class Cart
      */
     public function getCartItems(): Collection
     {
-        return $this->cartItems;
+        return $this->cartItems ?? new ArrayCollection();
     }
 
     /**
@@ -69,11 +69,7 @@ class Cart
 
     public function addCartItem(CartItem $cartItem): static
     {
-        try {
-            $cartItems = $this->getCartItems();
-        } catch (\Error $e) {
-            $cartItems = new ArrayCollection();
-        }
+        $cartItems = $this->getCartItems();
         if ($cartItems->isEmpty() || !$cartItems->contains($cartItem)) {
             $cartItems->add($cartItem);
             $this->setCartItems($cartItems);

@@ -74,7 +74,7 @@ class Author
      */
     public function getBooks(): Collection
     {
-        return $this->books;
+        return $this->books ?? new ArrayCollection();
     }
 
     /**
@@ -88,11 +88,7 @@ class Author
 
     public function addBook(Book $book): static
     {
-        try {
-            $books = $this->getBooks();
-        } catch (\Error $e) {
-            $books = new ArrayCollection();
-        }
+        $books = $this->getBooks();
         if ($books->isEmpty() || !$books->contains($book)) {
             $books->add($book);
             $this->setBooks($books);

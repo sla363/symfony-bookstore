@@ -49,7 +49,7 @@ class Role
      */
     public function getUsers(): Collection
     {
-        return $this->users;
+        return $this->users ?? new ArrayCollection();
     }
 
     /**
@@ -68,11 +68,7 @@ class Role
 
     public function addUser(User $user): static
     {
-        try {
-            $users = $this->getUsers();
-        } catch (\Error) {
-            $users = new ArrayCollection();
-        }
+        $users = $this->getUsers();
         if ($users->isEmpty() || !$users->contains($user)) {
             $users->add($user);
             $user->addRole($this);
@@ -83,11 +79,7 @@ class Role
 
     public function removeUser(User $user): static
     {
-        try {
-            $users = $this->getUsers();
-        } catch (\Error) {
-            $users = new ArrayCollection();
-        }
+        $users = $this->getUsers();
         if (!$users->isEmpty() && $users->contains($user)) {
             $users->removeElement($user);
             $user->removeRole($this);
