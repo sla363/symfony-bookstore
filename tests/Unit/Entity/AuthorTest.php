@@ -8,23 +8,16 @@ use PHPUnit\Framework\TestCase;
 
 class AuthorTest extends TestCase
 {
-    private ?Author $author;
+    private Author $author;
 
     protected function setUp(): void
     {
         $this->author = new Author();
     }
 
-    protected function tearDown(): void
-    {
-        $this->author = null;
-    }
-
-
     public function testGetFullName(): void
     {
         $author = $this->author;
-        $this->assertNotNull($author);
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $this->assertEquals('John Doe', $author->getFullName());
@@ -33,7 +26,6 @@ class AuthorTest extends TestCase
     public function testAddBook(): void
     {
         $author = $this->author;
-        $this->assertNotNull($author);
         $book = new Book();
         $book
             ->setIsbn('123123123')

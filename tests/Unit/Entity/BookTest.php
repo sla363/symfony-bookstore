@@ -14,22 +14,16 @@ use PHPUnit\Framework\TestCase;
 
 class BookTest extends TestCase
 {
-    private ?Book $book;
+    private Book $book;
 
     protected function setUp(): void
     {
         $this->book = new Book();
     }
 
-    protected function tearDown(): void
-    {
-        $this->book = null;
-    }
-
     public function testBookAddOrderItem(): void
     {
         $book = $this->book;
-        $this->assertNotNull($book);
         $orderItem = (new OrderItem())
             ->setQuantity(10)
             ->setItemPrice(new Money(100, new Currency('CZK')));
@@ -48,7 +42,6 @@ class BookTest extends TestCase
     public function testBookAddCartItem(): void
     {
         $book = $this->book;
-        $this->assertNotNull($book);
         $cartItem = (new CartItem())
             ->setCart((new Cart())->setUser((new User())->setEmail('test@email.com')));
         $book->addCartItem($cartItem);
@@ -64,7 +57,6 @@ class BookTest extends TestCase
     public function testBookAddPrice(): void
     {
         $book = $this->book;
-        $this->assertNotNull($book);
         $price = (new Price())
             ->setAmount(new Money(100, new Currency('CZK')));
         $book->addPrice($price);
