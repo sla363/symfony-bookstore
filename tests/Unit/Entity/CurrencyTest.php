@@ -62,6 +62,4 @@ class CurrencyTest extends TestCase
         $orderItems = $currency->getOrderItems();
         $this->assertEquals($secondOrderItem, $orderItems->next());
     }
-
-
 }
