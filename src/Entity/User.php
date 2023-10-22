@@ -61,6 +61,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+        return $this;
+    }
+
     public function getEmail(): string
     {
         return $this->email;
@@ -116,7 +122,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $userRoles = $this->userRoles;
         if (!$userRoles->isEmpty() && $userRoles->contains($userRole)) {
-            $userRoles->remove($userRole->getId());
+            $userRoles->removeElement($userRole);
             $userRole->removeUser($this);
             $this->setUserRoles($userRoles);
         }
