@@ -36,9 +36,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'app_user_role')]
     private Collection $userRoles;
 
-    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Cart::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Cart $cart;
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Cart::class)]
+    private Cart $cart;
 
     /**
      * @var Collection<int, Order> $orders
@@ -138,12 +137,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $roles->toArray();
     }
 
-    public function getCart(): ?Cart
+    public function getCart(): Cart
     {
         return $this->cart;
     }
 
-    public function setCart(?Cart $cart): static
+    public function setCart(Cart $cart): static
     {
         $this->cart = $cart;
         return $this;

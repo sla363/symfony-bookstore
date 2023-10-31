@@ -23,8 +23,7 @@ class Order
     #[ORM\Column(type: Types::STRING, length: 10, nullable: false)]
     private string $orderNumber;
 
-    #[ORM\OneToOne(inversedBy: 'order', targetEntity: Transaction::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToOne(mappedBy: 'order', targetEntity: Transaction::class)]
     private ?Transaction $transaction;
 
     /**

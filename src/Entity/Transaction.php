@@ -19,10 +19,9 @@ class Transaction
     #[ORM\Column(type: Types::STRING, length: 10, nullable: false)]
     private string $identifier;
 
-    #[ORM\OneToOne(mappedBy: 'transaction', targetEntity: Order::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(inversedBy: 'transaction', targetEntity: Order::class)]
+    #[ORM\JoinColumn(name: "order_id", referencedColumnName: "id", nullable: false)]
     private Order $order;
-
     public function getId(): int
     {
         return $this->id;
