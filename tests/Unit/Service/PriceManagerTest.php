@@ -131,4 +131,16 @@ class PriceManagerTest extends TestCase
         $result = $this->priceManager->getBookPrice($book, $user);
         $this->assertEquals(null, $result);
     }
+
+    public function testGetBookPriceWhenUserIsNullAndCurrencyNotFound(): void
+    {
+        $book = new Book();
+
+        $currencyRepoMock = $this->createMock(ObjectRepository::class);
+        $currencyRepoMock->method('findOneBy')->willReturn(null);
+        $this->entityManager->method('getRepository')->willReturn($currencyRepoMock);
+
+        $result = $this->priceManager->getBookPrice($book, null);
+        $this->assertEquals(null, $result);
+    }
 }
