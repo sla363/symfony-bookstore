@@ -25,39 +25,35 @@ class CartManager
     public function addItemToCart(User $user, Book $book): void
     {
         $cart = $user->getCart();
-        if ($cart) {
-            $booksInCart = $this->getBooksFromCart($cart);
-            if (!$booksInCart->contains($book)) {
-                $cartItem = new CartItem();
-                $cartItem->setBook($book);
-                $cartItem->setCart($cart);
-                $book->addCartItem($cartItem);
-                $cart->addCartItem($cartItem);
-                $cartItem->setCart($cart);
+        $booksInCart = $this->getBooksFromCart($cart);
+        if (!$booksInCart->contains($book)) {
+            $cartItem = new CartItem();
+            $cartItem->setBook($book);
+            $cartItem->setCart($cart);
+            $book->addCartItem($cartItem);
+            $cart->addCartItem($cartItem);
+            $cartItem->setCart($cart);
 
-                $this->entityManager->persist($book);
-                $this->entityManager->persist($cart);
-                $this->entityManager->persist($cartItem);
-                $this->entityManager->flush();
-            }
+            $this->entityManager->persist($book);
+            $this->entityManager->persist($cart);
+            $this->entityManager->persist($cartItem);
+            $this->entityManager->flush();
         }
     }
 
     public function removeItemFromCart(User $user, Book $book): void
     {
         $cart = $user->getCart();
-        if ($cart) {
-            $booksInCart = $this->getBooksFromCart($cart);
-            if ($booksInCart->contains($book)) {
-                $updatedCartItems = $cart->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() !== $book);
-                $cartItemToRemove = $cart->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() === $book)->first();
-                if ($cartItemToRemove) {
-                    $cart->setCartItems(new ArrayCollection($updatedCartItems->toArray()));
-                    $this->entityManager->remove($cartItemToRemove);
+        $booksInCart = $this->getBooksFromCart($cart);
+        if ($booksInCart->contains($book)) {
+            $updatedCartItems = $cart->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() !== $book);
+            $cartItemToRemove = $cart->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() === $book)->first();
+            if ($cartItemToRemove) {
+                $cart->setCartItems(new ArrayCollection($updatedCartItems->toArray()));
+                $this->entityManager->remove($cartItemToRemove);
 
-                    $this->entityManager->persist($cart);
-                    $this->entityManager->flush();
-                }
+                $this->entityManager->persist($cart);
+                $this->entityManager->flush();
             }
         }
     }
@@ -65,22 +61,16 @@ class CartManager
     public function clearCart(User $user): void
     {
         $cart = $user->getCart();
-        if ($cart) {
-            $cartItems = $cart->getCartItems();
-            foreach ($cartItems as $cartItem) {
-                $this->entityManager->remove($cartItem);
-            }
-            $this->entityManager->flush();
+        $cartItems = $cart->getCartItems();
+        foreach ($cartItems as $cartItem) {
+            $this->entityManager->remove($cartItem);
         }
+        $this->entityManager->flush();
     }
 
     public function getCartItem(User $user, Book $book): ?CartItem
     {
-        $cart = $user->getCart();
-        if ($cart) {
-            return $cart->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() === $book)->first() ?: null;
-        }
-        return null;
+        return $user->getCart()->getCartItems()->filter(fn(CartItem $cartItem) => $cartItem->getBook() === $book)->first() ?: null;
     }
 
     /**
@@ -91,10 +81,17 @@ class CartManager
         return $cart->getCartItems()->map(fn(CartItem $cartItem) => $cartItem->getBook());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getTotalSumInCart(Cart $cart): Money
     {
         $books = $this->getBooksFromCart($cart);
-        $selectedCurrency = $cart->getUser()->getSelectedCurrency();
+        if ($cart->getUser()) {
+            $selectedCurrency = $cart->getUser()->getSelectedCurrency();
+        } else {
+            throw new \Exception('No user available.');
+        }
         $total = new Money(0, new Currency($selectedCurrency->getCode()));
         foreach ($books as $book) {
             /** @var Book $book */

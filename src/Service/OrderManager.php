@@ -36,9 +36,6 @@ class OrderManager
     public function placeOrder(User $user): void
     {
         $cart = $user->getCart();
-        if (!$cart) {
-            throw new \Exception('Cannot place an order with no cart.');
-        }
         $cartItems = $cart->getCartItems();
         if ($cartItems->isEmpty()) {
             throw new \Exception('Cannot place an order with no items in the cart.');

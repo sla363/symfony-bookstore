@@ -87,7 +87,7 @@ class CartController extends AbstractController
             $this->addFlash('notice', 'You must be logged in to perform this action');
             return $this->redirectToRoute('main_page');
         }
-        if ($user && $user->getCart()) {
+        if ($user) {
             return $this->render('cart.html.twig', [
                 'cart' => $user->getCart(),
                 'total' => $user->getCart()->getCartItems()->isEmpty() ? 0 : $this->cartManager->getTotalSumInCartDisplayPrice($user->getCart()),
